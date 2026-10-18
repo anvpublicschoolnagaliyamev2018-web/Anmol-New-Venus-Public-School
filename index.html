@@ -1,354 +1,71 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#102b63">
-  <meta name="description" content="ANV Public School, Nagaliya Mev, Gajraula, Amroha, Uttar Pradesh. Admissions open for Nursery to Class 5, Session 2026-27.">
-  <title>ANV Public School | Admissions 2026-27</title>
-
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#102b63">
+<meta name="description" content="ANV Public School, Nagaliya Mev, Gajraula, Amroha, Uttar Pradesh. Session 2026-27.">
+<title>ANV Public School | Session 2026-27</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.portal-links{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:20px auto}
+.portal-links a,.portal-btn{display:inline-block;background:#174a9b;color:#fff;padding:12px 18px;border-radius:9px;text-decoration:none;font-weight:700;border:0;cursor:pointer}
+.portal-area{max-width:1100px;margin:25px auto;padding:24px;background:#fff;border:1px solid #dce4f1;border-radius:16px;box-shadow:0 8px 30px #102b6310}
+.portal-area h2{color:#102b63}.portal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:15px}
+.portal-item{padding:16px;border:1px solid #dce4f1;border-radius:12px;background:#f7f9fd;margin:10px 0}
+.portal-item h3{margin-top:0;color:#102b63}.portal-item a{color:#174a9b;font-weight:700}
+.portal-muted{color:#687790;font-size:14px}.portal-error{color:#a92a35}.portal-success{color:#18794e}
+</style>
 </head>
 <body>
-
-  <!-- Intro / Loader -->
-  <div id="introScreen" class="intro-screen">
-    <img src="6751.gif" alt="ANV Public School Logo" class="intro-logo">
-    <h1>ANV PUBLIC SCHOOL</h1>
-    <p>Learning Today, Leading Tomorrow</p>
-    <div class="loader"></div>
-  </div>
-
-  <!-- Top Bar -->
-  <div class="topbar">
-    <span>📍 Nagaliya Mev, Gajraula, Amroha, Uttar Pradesh</span>
-    <a href="tel:+919756201099">📞 +91 97562 01099</a>
-  </div>
-
-  <!-- Header -->
-  <header class="main-header">
-    <a href="#home" class="brand">
-      <img src="6751.gif" alt="ANV Public School Logo">
-      <div>
-        <h1>ANV PUBLIC SCHOOL</h1>
-        <p>Education • Discipline • Excellence</p>
-      </div>
-    </a>
-
-    <button class="menu-toggle" id="menuToggle"
-      aria-label="Open navigation" aria-expanded="false">☰</button>
-
-    <nav class="nav-menu" id="navMenu">
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#classes">Classes</a>
-      <a href="#fees">Fee Structure</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#admission">Admission Enquiry</a>
-    </nav>
-  </header>
-
-  <main>
-    <!-- Hero -->
-    <section class="hero" id="home">
-      <div class="hero-overlay"></div>
-      <div class="hero-content reveal">
-        <span class="eyebrow">SESSION 2026–27</span>
-        <h2>A Bright Future Begins <span>Here!</span></h2>
-        <p>
-          Welcome to ANV Public School. We encourage young minds to learn,
-          grow and build a confident future.
-        </p>
-        <div class="hero-actions">
-          <a href="#admission" class="btn btn-primary">Enquire for Admission</a>
-          <a href="#fees" class="btn btn-outline">View Fee Structure</a>
-        </div>
-        <p class="admission-tag">Admissions Open: Nursery to Class 5</p>
-      </div>
-    </section>
-
-    <!-- Highlights -->
-    <section class="highlights container reveal">
-      <article class="highlight-card">
-        <span class="highlight-icon">📚</span>
-        <h3>Quality Education</h3>
-        <p>Strong learning foundations for every child.</p>
-      </article>
-      <article class="highlight-card">
-        <span class="highlight-icon">🌱</span>
-        <h3>Overall Development</h3>
-        <p>Encouraging curiosity, confidence and creativity.</p>
-      </article>
-      <article class="highlight-card">
-        <span class="highlight-icon">🤝</span>
-        <h3>Values & Discipline</h3>
-        <p>Building good habits and responsible learners.</p>
-      </article>
-    </section>
-
-    <!-- About -->
-    <section class="section container" id="about">
-      <div class="about-grid">
-        <div class="about-image reveal">
-          <img src="school-banner.jpg" alt="ANV Public School">
-          <div class="image-label">Welcome to ANV Public School</div>
-        </div>
-
-        <div class="about-content reveal">
-          <span class="section-kicker">ABOUT OUR SCHOOL</span>
-          <h2>Learning with Purpose, Growing with Confidence</h2>
-          <p>
-            ANV Public School aims to provide children with a supportive
-            environment where they can develop knowledge, discipline,
-            confidence and a love of learning.
-          </p>
-          <p>
-            We focus on foundational learning and the overall development
-            of students from Nursery to Class 5.
-          </p>
-          <a href="#admission" class="text-link">Ask about admissions →</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Classes -->
-    <section class="section section-soft" id="classes">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-kicker">OUR CLASSES</span>
-          <h2>A Strong Start for Every Child</h2>
-          <p>Choose the right starting point for your child's learning journey.</p>
-        </div>
-
-        <div class="class-grid">
-          <article class="class-card reveal">
-            <div class="class-number">01</div>
-            <h3>Nursery</h3>
-            <p>Playful beginnings, early learning and social development.</p>
-          </article>
-          <article class="class-card reveal">
-            <div class="class-number">02</div>
-            <h3>LKG & UKG</h3>
-            <p>Early literacy, numeracy and school readiness.</p>
-          </article>
-          <article class="class-card reveal">
-            <div class="class-number">03</div>
-            <h3>Class 1–2</h3>
-            <p>Building essential reading, writing and mathematics skills.</p>
-          </article>
-          <article class="class-card reveal">
-            <div class="class-number">04</div>
-            <h3>Class 3–5</h3>
-            <p>Developing understanding, independent thinking and confidence.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Fee Structure -->
-    <section class="section container" id="fees">
-      <div class="section-heading reveal">
-        <span class="section-kicker">FEE DETAILS</span>
-        <h2>School Fee Structure</h2>
-        <p>Session 2026–27. Select a class to view the applicable fees.</p>
-      </div>
-
-      <div class="fee-panel reveal">
-        <label for="classSelector">Select Class</label>
-        <select id="classSelector">
-          <option value="nursery">Nursery</option>
-          <option value="lkg">LKG</option>
-          <option value="ukg">UKG</option>
-          <option value="class1">Class 1</option>
-          <option value="class2">Class 2</option>
-          <option value="class3">Class 3</option>
-          <option value="class4">Class 4</option>
-          <option value="class5">Class 5</option>
-        </select>
-
-        <div class="fee-result" aria-live="polite">
-          <h3 id="feeClassName">Nursery Fee Details</h3>
-
-          <div class="fee-row">
-            <span>Monthly Fee</span>
-            <strong id="monthlyFee">₹400</strong>
-          </div>
-          <div class="fee-row">
-            <span>Annual Charge</span>
-            <strong>₹500 / year</strong>
-          </div>
-          <div class="fee-row">
-            <span>One-time Registration Fee</span>
-            
-            <strong>₹500</strong>
-          </div>
-
-          <p class="fee-note">
-            Registration fee is payable only at admission. The annual charge
-            is payable every year and includes tie, belt and ID card.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Online Payment -->
-    <section class="section payment-section">
-      <div class="container">
-        <div class="payment-card reveal">
-          <div class="payment-symbol">₹</div>
-          <span class="section-kicker">ONLINE PAYMENT</span>
-          <h2>Online Registration Fee Payment</h2>
-          <p>
-            Pay the one-time school registration fee online using the
-            official Cashfree payment link.
-          </p>
-
-          <div class="payment-amount">₹500 <span>Registration Fee</span></div>
-
-          <a href="#"
-             id="cashfreePayButton"
-             class="btn btn-primary payment-button">
-            Pay Registration Fee ₹500
-          </a>
-
-          <div class="secure-note">
-            🔒 Payment will open on Cashfree's payment page.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Motivation Banner -->
-    <section class="motivation-banner">
-      <div class="container reveal">
-        <h2>Every Child Has the Potential to Shine</h2>
-        <p>Let's work together to build a brighter tomorrow.</p>
-        <a href="#admission" class="btn btn-light">Contact for Admission</a>
-      </div>
-    </section>
-
-    <!-- Gallery -->
-    <section class="section container" id="gallery">
-      <div class="section-heading reveal">
-        <span class="section-kicker">OUR GALLERY</span>
-        <h2>A Glimpse of Our School</h2>
-      </div>
-
-      <div class="gallery-grid">
-        <figure class="gallery-item reveal">
-          <img src="gallery1.jpg" alt="ANV Public School gallery photo 1" loading="lazy">
-        </figure>
-        <figure class="gallery-item reveal">
-          <img src="Class6th.jpg" alt="ANV Public School gallery photo 2" loading="lazy">
-        </figure>
-        <figure class="gallery-item reveal">
-          <img src="gallery3.jpg" alt="ANV Public School gallery photo 3" loading="lazy">
-        </figure>
-      </div>
-    </section>
-
-    <!-- Admission Enquiry -->
-    <section class="section section-soft" id="admission">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-kicker">ADMISSIONS 2026–27</span>
-          <h2>Admission Enquiry Form</h2>
-          <p>Fill in the details below to contact the school.</p>
-        </div>
-
-        <div class="enquiry-card reveal">
-          <form id="admissionForm">
-            <div class="form-grid">
-              <div class="form-group">
-                <label for="studentName">Student Name *</label>
-                <input id="studentName" name="studentName" type="text"
-                  placeholder="Enter student name" required>
-              </div>
-
-              <div class="form-group">
-                <label for="guardianName">Parent / Guardian Name *</label>
-                <input id="guardianName" name="guardianName" type="text"
-                  placeholder="Enter parent or guardian name" required>
-              </div>
-
-              <div class="form-group">
-                <label for="mobileNumber">Mobile Number *</label>
-                <input id="mobileNumber" name="mobileNumber" type="tel"
-                  inputmode="numeric" pattern="[0-9]{10}" maxlength="10"
-                  placeholder="10-digit mobile number" required>
-              </div>
-
-              <div class="form-group">
-                <label for="admissionClass">Admission Class *</label>
-                <select id="admissionClass" name="admissionClass" required>
-                  <option value="">Select class</option>
-                  <option>Nursery</option>
-                  <option>LKG</option>
-                  <option>UKG</option>
-                  <option>Class 1</option>
-                  <option>Class 2</option>
-                  <option>Class 3</option>
-                  <option>Class 4</option>
-                  <option>Class 5</option>
-                </select>
-              </div>
-
-              <div class="form-group full-width">
-                <label for="parentMessage">Message (Optional)</label>
-                <textarea id="parentMessage" name="parentMessage" rows="4"
-                  placeholder="Any questions about admission?"></textarea>
-              </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary form-submit">
-              Send Enquiry on WhatsApp
-            </button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section class="section container" id="contact">
-      <div class="contact-panel reveal">
-        <div>
-          <span class="section-kicker">GET IN TOUCH</span>
-          <h2>ANV Public School</h2>
-          <p>📍 Nagaliya Mev, Gajraula, Amroha, Uttar Pradesh</p>
-          <p>📞 <a href="tel:+919756201099">+91 97562 01099</a></p>
-        </div>
-
-        <div class="contact-actions">
-          <a class="btn btn-primary"
-             href="https://wa.me/919756201099"
-             target="_blank" rel="noopener">WhatsApp Us</a>
-          <a class="btn btn-outline-dark"
-             href="https://maps.app.goo.gl/7WkPsM7mEdLqk82k8"
-             target="_blank" rel="noopener">Open Location</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div>
-        <h3>ANV PUBLIC SCHOOL</h3>
-        <p>Learning Today, Leading Tomorrow</p>
-      </div>
-      <p>© <span id="currentYear">2026</span> ANV Public School. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- Floating Buttons -->
-  <div class="floating-actions">
-    <a href="tel:+919756201099" class="floating-btn call-btn" aria-label="Call school">☎</a>
-    <a href="https://wa.me/919756201099" target="_blank" rel="noopener"
-       class="floating-btn whatsapp-btn" aria-label="WhatsApp school">✆</a>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+<div id="introScreen" class="intro-screen"><img src="6751.gif" alt="ANV Public School Logo" class="intro-logo"><h1>ANV PUBLIC SCHOOL</h1><p>Learning Today, Leading Tomorrow</p><div class="loader"></div></div>
+<div class="topbar"><span>📍 Nagaliya Mev, Gajraula, Amroha, Uttar Pradesh</span><a href="tel:+919756201099">📞 +91 97562 01099</a></div>
+<header class="main-header">
+<a href="#home" class="brand"><img src="6751.gif" alt="ANV Public School Logo"><div><h1>ANV PUBLIC SCHOOL</h1><p>Education • Discipline • Excellence</p></div></a>
+<button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+<nav class="nav-menu" id="navMenu"><a href="#home">Home</a><a href="#about">About</a><a href="#classes">Classes</a><a href="#fees">Fee Structure</a><a href="#portal">Student Portal</a><a href="#notices">Notices</a><a href="#syllabus">Syllabus</a><a href="#gallery">Gallery</a><a href="#admission">Admission Enquiry</a></nav>
+</header>
+<main>
+<section class="hero" id="home"><div class="hero-overlay"></div><div class="hero-content reveal"><span class="eyebrow">SESSION 2026–27</span><h2>A Bright Future Begins <span>Here!</span></h2><p>Welcome to ANV Public School. We encourage young minds to learn, grow and build a confident future.</p><div class="hero-actions"><a href="#admission" class="btn btn-primary">Enquire for Admission</a><a href="#fees" class="btn btn-outline">View Fee Structure</a></div><p class="admission-tag">Admissions Open: Nursery to Class 5</p></div></section>
+<section class="highlights container reveal"><article class="highlight-card"><span class="highlight-icon">📚</span><h3>Quality Education</h3><p>Strong learning foundations for every child.</p></article><article class="highlight-card"><span class="highlight-icon">🌱</span><h3>Overall Development</h3><p>Encouraging curiosity, confidence and creativity.</p></article><article class="highlight-card"><span class="highlight-icon">🤝</span><h3>Values & Discipline</h3><p>Building good habits and responsible learners.</p></article></section>
+<section class="section container" id="about"><div class="about-grid"><div class="about-image reveal"><img src="school-banner.jpg" alt="ANV Public School"><div class="image-label">Welcome to ANV Public School</div></div><div class="about-content reveal"><span class="section-kicker">ABOUT OUR SCHOOL</span><h2>Learning with Purpose, Growing with Confidence</h2><p>ANV Public School aims to provide children with a supportive environment where they can develop knowledge, discipline, confidence and a love of learning.</p><p>We focus on foundational learning and the overall development of students from Nursery to Class 5.</p><a href="#admission" class="text-link">Ask about admissions →</a></div></div></section>
+<section class="section section-soft" id="classes"><div class="container"><div class="section-heading reveal"><span class="section-kicker">OUR CLASSES</span><h2>A Strong Start for Every Child</h2><p>Choose the right starting point for your child's learning journey.</p></div><div class="class-grid"><article class="class-card reveal"><div class="class-number">01</div><h3>Nursery</h3><p>Playful beginnings, early learning and social development.</p></article><article class="class-card reveal"><div class="class-number">02</div><h3>LKG & UKG</h3><p>Early literacy, numeracy and school readiness.</p></article><article class="class-card reveal"><div class="class-number">03</div><h3>Class 1–2</h3><p>Building essential reading, writing and mathematics skills.</p></article><article class="class-card reveal"><div class="class-number">04</div><h3>Class 3–5</h3><p>Developing understanding, independent thinking and confidence.</p></article></div></div></section>
+<section class="section container" id="fees"><div class="section-heading reveal"><span class="section-kicker">FEE DETAILS</span><h2>School Fee Structure</h2><p>Session 2026–27. Select a class to view the applicable fees.</p></div><div class="fee-panel reveal"><label for="classSelector">Select Class</label><select id="classSelector"><option value="nursery">Nursery</option><option value="lkg">LKG</option><option value="ukg">UKG</option><option value="class1">Class 1</option><option value="class2">Class 2</option><option value="class3">Class 3</option><option value="class4">Class 4</option><option value="class5">Class 5</option></select><div class="fee-result" aria-live="polite"><h3 id="feeClassName">Nursery Fee Details</h3><div class="fee-row"><span>Monthly Fee</span><strong id="monthlyFee">₹400</strong></div><div class="fee-row"><span>Annual Charge</span><strong>₹500 / year</strong></div><div class="fee-row"><span>One-time Registration Fee</span><strong>₹500</strong></div><p class="fee-note">Registration fee is payable only at admission. The annual charge is payable every year and includes tie, belt and ID card.</p></div></div></section>
+<section class="section payment-section"><div class="container"><div class="payment-card reveal"><div class="payment-symbol">₹</div><span class="section-kicker">ONLINE PAYMENT</span><h2>Online Registration Fee Payment</h2><p>Pay the one-time school registration fee online using the official Cashfree payment link.</p><div class="payment-amount">₹500 <span>Registration Fee</span></div><a href="#" id="cashfreePayButton" class="btn btn-primary payment-button">Pay Registration Fee ₹500</a><div class="secure-note">🔒 Payment will open on Cashfree's payment page.</div></div></div></section>
+<section class="section container" id="portal"><div class="section-heading"><span class="section-kicker">STUDENT SERVICES</span><h2>School Login Portal</h2><p>Students can sign in to access their published admit cards. Syllabus and public notices are available below.</p></div><div class="portal-links"><a href="student.html">Student Login / Admit Cards</a><a href="admin.html">School Admin Login</a></div><p class="portal-muted" style="text-align:center">For account access, contact the school office. Do not share your password with anyone.</p></section>
+<section class="section section-soft" id="notices"><div class="portal-area"><div class="section-heading"><span class="section-kicker">LATEST UPDATES</span><h2>School Notice Board</h2><p>Official announcements from ANV Public School.</p></div><div id="publicNotices" aria-live="polite">Loading notices…</div></div></section>
+<section class="section container" id="syllabus"><div class="portal-area"><div class="section-heading"><span class="section-kicker">STUDY MATERIAL</span><h2>Download Syllabus</h2><p>Select your class and exam to find the syllabus uploaded by the school.</p></div><div class="portal-grid"><div><label for="syllabusClass">Class</label><select id="syllabusClass"><option value="">All classes</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div><div><label for="syllabusExam">Exam</label><select id="syllabusExam"><option value="">All exams</option><option>Unit Test 1st</option><option>Unit Test 2nd</option><option>Half Yearly Examination</option><option>Annual Examination</option></select></div></div><div id="publicSyllabus" aria-live="polite">Loading syllabus…</div></div></section>
+<section class="motivation-banner"><div class="container reveal"><h2>Every Child Has the Potential to Shine</h2><p>Let's work together to build a brighter tomorrow.</p><a href="#admission" class="btn btn-light">Contact for Admission</a></div></section>
+<section class="section container" id="gallery"><div class="section-heading reveal"><span class="section-kicker">OUR GALLERY</span><h2>A Glimpse of Our School</h2></div><div class="gallery-grid"><figure class="gallery-item reveal"><img src="gallery1.jpg" alt="ANV Public School gallery photo 1" loading="lazy"></figure><figure class="gallery-item reveal"><img src="Class6th.jpg" alt="ANV Public School gallery photo 2" loading="lazy"></figure><figure class="gallery-item reveal"><img src="gallery3.jpg" alt="ANV Public School gallery photo 3" loading="lazy"></figure></div></section>
+<section class="section section-soft" id="admission"><div class="container"><div class="section-heading reveal"><span class="section-kicker">ADMISSIONS 2026–27</span><h2>Admission Enquiry Form</h2><p>Fill in the details below to contact the school.</p></div><div class="enquiry-card reveal"><form id="admissionForm"><div class="form-grid"><div class="form-group"><label for="studentName">Student Name *</label><input id="studentName" name="studentName" type="text" placeholder="Enter student name" required></div><div class="form-group"><label for="guardianName">Parent / Guardian Name *</label><input id="guardianName" name="guardianName" type="text" placeholder="Enter parent or guardian name" required></div><div class="form-group"><label for="mobileNumber">Mobile Number *</label><input id="mobileNumber" name="mobileNumber" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10-digit mobile number" required></div><div class="form-group"><label for="admissionClass">Admission Class *</label><select id="admissionClass" name="admissionClass" required><option value="">Select class</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div><div class="form-group full-width"><label for="parentMessage">Message (Optional)</label><textarea id="parentMessage" name="parentMessage" rows="4" placeholder="Any questions about admission?"></textarea></div></div><button type="submit" class="btn btn-primary form-submit">Send Enquiry on WhatsApp</button></form></div></div></section>
+<section class="section container" id="contact"><div class="contact-panel reveal"><div><span class="section-kicker">GET IN TOUCH</span><h2>ANV Public School</h2><p>📍 Nagaliya Mev, Gajraula, Amroha, Uttar Pradesh</p><p>📞 <a href="tel:+919756201099">+91 97562 01099</a></p></div><div class="contact-actions"><a class="btn btn-primary" href="https://wa.me/919756201099" target="_blank" rel="noopener">WhatsApp Us</a><a class="btn btn-outline-dark" href="https://maps.app.goo.gl/7WkPsM7mEdLqk82k8" target="_blank" rel="noopener">Open Location</a></div></div></section>
+</main>
+<footer class="footer"><div class="container footer-inner"><div><h3>ANV PUBLIC SCHOOL</h3><p>Learning Today, Leading Tomorrow</p></div><p>© <span id="currentYear">2026</span> ANV Public School. All rights reserved.</p></div></footer>
+<div class="floating-actions"><a href="tel:+919756201099" class="floating-btn call-btn" aria-label="Call school">☎</a><a href="https://wa.me/919756201099" target="_blank" rel="noopener" class="floating-btn whatsapp-btn" aria-label="WhatsApp school">✆</a></div>
+<script src="script.js"></script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import {getFirestore,collection,getDocs,query,where,orderBy} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyDPQNf38Abzi01ysHey5GDPa77NIALHnw0",authDomain:"anv-public-school.firebaseapp.com",projectId:"anv-public-school",appId:"1:549207509375:web:efe695091a65f84992b24a"};
+const db=getFirestore(initializeApp(cfg));
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function showError(id,msg){$(id).textContent=msg;}
+async function loadPublic(){
+ try{
+  const snap=await getDocs(query(collection(db,"siteContent"),where("published","==",true)));
+  const items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.type==="announcement").sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  const box=$("publicNotices");box.replaceChildren();
+  if(!items.length){box.textContent="No notices have been published yet.";return;}
+  items.forEach(n=>{const a=document.createElement("article");a.className="portal-item";const h=document.createElement("h3");h.textContent=n.title||"School Notice";const p=document.createElement("p");p.textContent=n.text||"";const m=document.createElement("p");m.className="portal-muted";m.textContent=n.createdAt?.seconds?new Date(n.createdAt.seconds*1000).toLocaleDateString():"";a.append(h,p,m);box.append(a);});
+ }catch(e){showError("publicNotices","Notices could not load. Please check Firestore setup and rules.");}
+ try{
+  const snap=await getDocs(query(collection(db,"syllabus"),where("published","==",true)));
+  const items=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  const box=$("publicSyllabus");
+  function render(){box.replaceChildren();const cls=$("syllabusClass").value,exam=$("syllabusExam").value;const filtered=items.filter(x=>(!cls||x.studentClass===cls)&&(!exam||x.examType===exam));if(!filtered.length){box.textContent="No syllabus is published for this selection yet.";return;}filtered.forEach(x=>{const a=document.createElement("article");a.className="portal-item";const h=document.createElement("h3");h.textContent=x.title||"Syllabus";const p=document.createElement("p");p.textContent=`${x.studentClass||"Class not specified"} · ${x.examType||"Exam not specified"} · Session ${x.session||"—"}`;const link=document.createElement("a");link.href=x.downloadURL;link.target="_blank";link.rel="noopener";link.textContent="Download PDF";a.append(h,p,link);box.append(a);});}
+  $("syllabusClass").addEventListener("change",render);$("syllabusExam").addEventListener("change",render);render();
+ }catch(e){showError("publicSyllabus","Syllabus could not load. Please check Firebase Storage and Firestore setup.");}
+}
+loadPublic();
+</script>
+</body></html>
