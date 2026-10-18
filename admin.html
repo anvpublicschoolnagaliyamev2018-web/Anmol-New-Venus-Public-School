@@ -56,6 +56,203 @@ th, td {
     font-size: 13px;
   }
 }
+  
+/* ANVPS PREMIUM DASHBOARD UPGRADE */
+body {
+  background: #eef2fa;
+  background-image:
+    radial-gradient(circle at 10% 5%, #dce7ff 0, transparent 30%),
+    radial-gradient(circle at 95% 40%, #fff1ce 0, transparent 25%);
+  color: #17233b;
+}
+
+header {
+  position: relative;
+  overflow: hidden;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  background: linear-gradient(125deg, #07152f, #102b63 58%, #2362b5);
+  border-bottom: 5px solid #f5bd35;
+  box-shadow: 0 10px 30px #102b6325;
+}
+
+header h1 {
+  font-size: clamp(21px, 4vw, 30px);
+  letter-spacing: .5px;
+}
+
+header p {
+  line-height: 1.7;
+}
+
+main {
+  max-width: 1250px;
+  margin-top: 30px;
+}
+
+.card {
+  border: 1px solid #e0e7f3;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 8px 28px rgba(16, 43, 99, .07);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+
+#loginCard {
+  max-width: 620px;
+  margin: 35px auto;
+  border-top: 4px solid #f5bd35;
+}
+
+h2 {
+  font-size: 21px;
+  letter-spacing: -.2px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+.grid {
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.stat {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #fff, #f0f5ff);
+  border: 1px solid #dbe5f5;
+  border-radius: 17px;
+  padding: 23px;
+  box-shadow: 0 6px 18px #102b630c;
+}
+
+.stat::after {
+  content: "";
+  display: block;
+  height: 4px;
+  width: 42px;
+  background: #f5bd35;
+  border-radius: 10px;
+  margin-top: 14px;
+}
+
+.stat strong {
+  font-size: 32px;
+  color: #174a9b;
+}
+
+.tabs {
+  gap: 10px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #e0e7f3;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px #102b630a;
+}
+
+.tabs button {
+  flex: 1 1 145px;
+  min-height: 45px;
+  border-radius: 11px;
+  background: #edf2fb;
+  color: #102b63;
+  border: 1px solid #dce5f4;
+}
+
+.tabs button:hover,
+.tabs button:focus-visible {
+  background: #102b63;
+  color: #fff;
+}
+
+button, .button {
+  border-radius: 10px;
+  padding: 12px 17px;
+  box-shadow: 0 3px 9px #102b6315;
+}
+
+button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 16px #102b6320;
+}
+
+input, select, textarea {
+  border: 1px solid #d3ddec;
+  border-radius: 10px;
+  min-height: 44px;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #174a9b;
+  outline: 3px solid #174a9b20;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #e0e7f3;
+  border-radius: 12px;
+  background: #fff;
+}
+
+th {
+  background: #102b63;
+  color: #fff;
+  padding: 14px 12px;
+}
+
+td {
+  padding: 13px 12px;
+}
+
+tbody tr:nth-child(even) {
+  background: #f7f9fd;
+}
+
+tbody tr:hover {
+  background: #edf3ff;
+}
+
+.badge {
+  background: #fff3ce;
+  color: #76500b;
+  padding: 7px 11px;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  main {
+    margin-top: 16px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .stat {
+    padding: 17px;
+  }
+
+  .stat strong {
+    font-size: 27px;
+  }
+
+  .tabs button {
+    flex: 1 1 42%;
+    padding: 11px 8px;
+  }
+
+  .toolbar button {
+    flex: 1 1 auto;
+  }
+}
+  
+
 </style></head><body>
 <header><h1>ANMOL NEW VENUS PUBLIC SCHOOL</h1><p>Admin Dashboard · Nagaliya Mev, Gajraula, Amroha, UP · Session 2026–27</p></header>
 <main>
