@@ -4,176 +4,727 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
+  <meta name="robots" content="noindex,nofollow">
   <meta name="theme-color" content="#102b63">
-  <title>ANVPS Admin Login</title>
+  <title>ANVPS | Admin Dashboard</title>
+
   <style>
+    :root {
+      --navy: #102b63;
+      --blue: #174a9b;
+      --gold: #f5bd35;
+      --bg: #f3f6fc;
+      --border: #dce4f1;
+      --text: #17233b;
+      --muted: #687790;
+    }
     * { box-sizing: border-box; }
     body {
-      margin: 0; min-height: 100vh; padding: 20px;
-      display: grid; place-items: center;
+      margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg,#091c42,#174a9b);
-      color: #26334a;
+      background: var(--bg);
+      color: var(--text);
     }
+    header {
+      background: linear-gradient(120deg, #091c42, #174a9b);
+      color: white;
+      padding: 22px max(16px, calc((100% - 1180px)/2));
+      border-bottom: 4px solid var(--gold);
+    }
+    header h1 { margin: 0 0 7px; font-size: 23px; }
+    header p { margin: 0; color: #dce7ff; font-size: 14px; }
+    main { max-width: 1180px; margin: 22px auto; padding: 0 14px 40px; }
     .card {
-      width: 100%; max-width: 420px; padding: 30px;
-      border-radius: 20px; background: white;
-      box-shadow: 0 20px 60px #0003;
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 5px 22px #102b630c;
+      margin-bottom: 17px;
     }
-    h1 { color: #102b63; margin-top: 0; }
-    p { color: #66748a; }
-    label { display: block; margin: 16px 0 6px; font-weight: bold; }
-    input {
-      width: 100%; padding: 13px; border: 1px solid #ccd5e4;
-      border-radius: 10px; font-size: 16px;
+    h2 { color: var(--navy); margin-top: 0; font-size: 21px; }
+    h3 { color: var(--navy); }
+    label { display: block; font-weight: 700; font-size: 14px; margin: 12px 0 6px; }
+    input, select, textarea {
+      width: 100%; padding: 12px;
+      border: 1px solid #ccd5e4; border-radius: 8px;
+      font: inherit; background: white; color: var(--text);
     }
-    button {
-      width: 100%; padding: 13px; margin-top: 18px;
-      border: 0; border-radius: 10px; cursor: pointer;
-      color: white; background: #174a9b; font-size: 16px;
-      font-weight: bold;
+    textarea { min-height: 85px; resize: vertical; }
+    button, .button {
+      border: 0; border-radius: 8px; padding: 11px 15px;
+      background: var(--blue); color: white; font-weight: 700;
+      cursor: pointer; font-size: 14px;
     }
-    button:disabled { opacity: .6; cursor: wait; }
-    #status { overflow-wrap: anywhere; font-size: 14px; }
+    button:hover { filter: brightness(1.08); }
+    button:disabled { opacity: .55; cursor: wait; }
+    button.secondary { background: #e7edf8; color: var(--navy); }
+    button.danger { background: #a92a35; }
+    .toolbar, .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 12px; }
+    .stat { background: #f0f5ff; border: 1px solid #dce7fa; padding: 17px; border-radius: 11px; }
+    .stat span { color: var(--muted); font-size: 13px; }
+    .stat strong { display: block; font-size: 26px; color: var(--blue); margin-top: 8px; }
+    .two-col { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 14px; }
+    .muted { color: var(--muted); font-size: 13px; line-height: 1.5; }
     .hidden { display: none !important; }
-    .back { display: block; margin-top: 20px; color: #174a9b; }
+    #status, #loginStatus, #admitStatus { overflow-wrap: anywhere; font-size: 14px; }
+    pre {
+      white-space: pre-wrap; overflow-wrap: anywhere;
+      background: #f7f9fd; padding: 13px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: 12px;
+      max-height: 420px; overflow: auto;
+    }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: #f0f5ff; color: var(--navy); }
+    .badge { display: inline-block; border-radius: 20px; background: #e7edf8; padding: 4px 8px; font-size: 12px; }
+    .admit-card {
+      color: #102b63; background: white; border: 2px solid #102b63;
+      padding: 23px; margin: 18px 0; break-inside: avoid;
+      font-family: Arial, sans-serif;
+    }
+    .school-logo {
+      width: 66px; height: 66px; object-fit: contain;
+      display: block; margin: 0 auto 8px;
+    }
+    .admit-card h2, .admit-card h3 { text-align: center; margin: 7px 0; }
+    .admit-card h2 { font-size: 21px; }
+    .admit-card h3 { font-size: 15px; }
+    .admit-card hr { border: 0; border-top: 1px solid #cbd6e6; margin: 14px 0; }
+    .admit-row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .admit-details p { margin: 12px 0; }
+    .admit-photo {
+      width: 85px; height: 100px; object-fit: cover;
+      border: 1px solid #cbd6e6; display: block;
+    }
+    .signature-row {
+      display: flex; justify-content: space-between; gap: 25px;
+      margin-top: 48px; text-align: center; font-size: 12px;
+    }
+    .signature-row span { border-top: 1px solid #102b63; padding-top: 7px; min-width: 130px; }
+    footer { text-align: center; padding: 20px; color: var(--muted); font-size: 12px; }
+    @media(max-width:600px) {
+      .card { padding: 15px; }
+      header h1 { font-size: 20px; }
+      .tabs button { flex: 1 1 42%; }
+    }
+    @media print {
+      body { background: white !important; }
+      body * { visibility: hidden !important; }
+      #printArea, #printArea * { visibility: visible !important; }
+      #printArea {
+        display: block !important; position: absolute;
+        left: 0; top: 0; width: 100%;
+      }
+      #printArea .admit-card {
+        margin: 0; border-radius: 0; page-break-after: always;
+        break-after: page;
+      }
+      #printArea .admit-card:last-child {
+        page-break-after: auto; break-after: auto;
+      }
+      @page { size: A4 portrait; margin: 12mm; }
+    }
   </style>
 </head>
-<body>
-  <main class="card">
-    <h1>ANVPS Admin</h1>
-    <p>ANMOL NEW VENUS PUBLIC SCHOOL</p>
 
+<body>
+<header>
+  <h1>ANMOL NEW VENUS PUBLIC SCHOOL</h1>
+  <p>Admin Dashboard · Nagaliya Mev, Gajraula, Amroha, UP · Session 2026–27</p>
+</header>
+
+<main>
+  <section class="card" id="loginCard">
+    <h2>Secure Admin Login</h2>
+    <p class="muted">Sign in with the authorized Firebase admin account.</p>
     <form id="loginForm">
       <label for="email">Admin Email</label>
-      <input id="email" type="email" autocomplete="username"
-             required>
-
+      <input id="email" type="email" required autocomplete="username"
+        value="anvpublicschoolnagaliyamev2018@gmail.com">
       <label for="password">Password</label>
-      <input id="password" type="password"
-             autocomplete="current-password" required>
-
-      <button id="loginButton" type="submit">Secure Login</button>
+      <input id="password" type="password" required autocomplete="current-password">
+      <button id="loginBtn" type="submit">Secure Login</button>
     </form>
+    <p id="loginStatus" role="status" aria-live="polite"></p>
+    <a href="index.html">← Back to School Website</a>
+  </section>
 
-    <section id="dashboard" class="hidden">
-      <h2>Login Successful</h2>
-      <p id="adminEmail"></p>
-      <p>Firebase authentication successful hai.</p>
-      <button id="logoutButton" type="button">Logout</button>
+  <section id="dashboard" class="hidden">
+    <div class="card">
+      <div class="toolbar">
+        <span class="badge" id="signedInAs">Admin</span>
+        <button id="refreshBtn" type="button">Refresh Data</button>
+        <button id="logoutBtn" type="button" class="secondary">Logout</button>
+      </div>
+      <p id="status" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="grid">
+      <div class="stat"><span>Admission Enquiries</span><strong id="admissionCount">—</strong></div>
+      <div class="stat"><span>Payment Records</span><strong id="paymentCount">—</strong></div>
+      <div class="stat"><span>Students</span><strong id="studentCount">—</strong></div>
+      <div class="stat"><span>Website Content Records</span><strong id="contentCount">—</strong></div>
+    </div>
+
+    <div class="tabs" style="margin-top:18px">
+      <button type="button" data-tab="homePanel">Overview</button>
+      <button type="button" data-tab="admissionPanel">Admissions</button>
+      <button type="button" data-tab="paymentPanel">Fees & Payments</button>
+      <button type="button" data-tab="studentPanel">Student Records</button>
+      <button type="button" data-tab="admitPanel">Admit Cards</button>
+      <button type="button" data-tab="websitePanel">Website Management</button>
+    </div>
+
+    <section class="card tabPanel" id="homePanel">
+      <h2>School Admin Overview</h2>
+      <p>Choose a section above to manage school records.</p>
+      <p class="muted">Records will appear here after the relevant data is saved in Firestore.</p>
     </section>
 
-    <p id="status" role="status" aria-live="polite"></p>
-    <a class="back" href="index.html">← Back to School Website</a>
-  </main>
+    <section class="card tabPanel hidden" id="admissionPanel">
+      <h2>Admission Enquiries</h2>
+      <p class="muted">Only enquiries saved in the admissionEnquiries collection will appear here.</p>
+      <button type="button" id="loadAdmissionsBtn">Load Enquiries</button>
+      <div class="table-wrap" id="admissionTable"></div>
+    </section>
 
-  <script type="module">
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    <section class="card tabPanel hidden" id="paymentPanel">
+      <h2>Fee & Payment Records</h2>
+      <p class="muted">Payment records are read-only in this dashboard. A trusted server must verify the payment before recording it as paid.</p>
+      <button type="button" id="loadPaymentsBtn">Load Payment Records</button>
+      <div class="table-wrap" id="paymentTable"></div>
+    </section>
 
-    import {
-      getAuth, signInWithEmailAndPassword,
-      onAuthStateChanged, signOut
-    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+    <section class="card tabPanel hidden" id="studentPanel">
+      <h2>Student Records</h2>
+      <form id="studentForm">
+        <div class="two-col">
+          <div>
+            <label for="studentName">Student Name</label>
+            <input id="studentName" required maxlength="100">
+          </div>
+          <div>
+            <label for="admissionNumber">Admission Number</label>
+            <input id="admissionNumber" required maxlength="40" placeholder="ANV-2026-001">
+          </div>
+          <div>
+            <label for="studentClass">Class</label>
+            <select id="studentClass" required>
+              <option value="">Select Class</option>
+              <option>Nursery</option><option>LKG</option><option>UKG</option>
+              <option>Class 1</option><option>Class 2</option>
+              <option>Class 3</option><option>Class 4</option><option>Class 5</option>
+            </select>
+          </div>
+          <div>
+            <label for="rollNumber">Roll Number</label>
+            <input id="rollNumber" required maxlength="20">
+          </div>
+          <div>
+            <label for="parentName">Parent / Guardian Name</label>
+            <input id="parentName" required maxlength="100">
+          </div>
+          <div>
+            <label for="studentPhotoUrl">Student Photo URL (optional)</label>
+            <input id="studentPhotoUrl" type="url" placeholder="https://...">
+          </div>
+        </div>
+        <button type="submit" id="saveStudentBtn">Add Student</button>
+      </form>
+      <h3>Saved Students</h3>
+      <button type="button" id="loadStudentsBtn">Load Students</button>
+      <div class="table-wrap" id="studentTable"></div>
+    </section>
 
-    // Firebase console ke Config option se apni values bharein.
-    const firebaseConfig = {
-      apiKey: "AIzaSyDPQNf38Abzi01ysHey5GDPa77NIALHnw0",
-      authDomain: "anv-public-school.firebaseapp.com",
-      projectId: "anv-public-school",
-      appId: "1:549207509375:web:efe695091a65f84992b24a"
+    <section class="card tabPanel hidden" id="admitPanel">
+      <h2>Admit Card Generator</h2>
+      <p class="muted">Generate a single student's admit card or all cards for a selected class.</p>
+      <form id="admitForm">
+        <div class="two-col">
+          <div>
+            <label for="examType">Exam Type</label>
+            <select id="examType" required>
+              <option>Annual Examination</option>
+              <option>Monthly / Periodic Test</option>
+            </select>
+          </div>
+          <div>
+            <label for="examTitle">Exam Name</label>
+            <input id="examTitle" required maxlength="100" placeholder="Annual Examination 2026–27">
+          </div>
+          <div>
+            <label for="examSession">Session</label>
+            <input id="examSession" value="2026–27" required maxlength="20">
+          </div>
+          <div>
+            <label for="examClass">Class</label>
+            <select id="examClass" required>
+              <option value="">Select Class</option>
+              <option>Nursery</option><option>LKG</option><option>UKG</option>
+              <option>Class 1</option><option>Class 2</option>
+              <option>Class 3</option><option>Class 4</option><option>Class 5</option>
+            </select>
+          </div>
+          <div>
+            <label for="examStart">Exam Start Date</label>
+            <input id="examStart" type="date" required>
+          </div>
+          <div>
+            <label for="examEnd">Exam End Date</label>
+            <input id="examEnd" type="date" required>
+          </div>
+          <div>
+            <label for="logoUrl">School Logo URL (optional)</label>
+            <input id="logoUrl" type="url" placeholder="https://.../6751.gif">
+          </div>
+        </div>
+        <label for="examInstructions">Exam Instructions</label>
+        <textarea id="examInstructions" maxlength="500">Please arrive on time and bring the required stationery. Follow all instructions given by the invigilator.</textarea>
+        <button type="submit" id="loadExamStudentsBtn">Load Students for This Class</button>
+      </form>
+
+      <p id="admitStatus" role="status" aria-live="polite"></p>
+
+      <div id="admitControls" class="hidden">
+        <label for="singleStudent">Select Student</label>
+        <select id="singleStudent">
+          <option value="">Select student</option>
+        </select>
+        <div class="toolbar" style="margin-top:12px">
+          <button type="button" id="singleCardBtn">Generate Single Admit Card</button>
+          <button type="button" id="bulkCardBtn">Generate Whole Class</button>
+          <button type="button" id="printCardsBtn" class="secondary">Print / Save as PDF</button>
+        </div>
+      </div>
+      <div id="printArea"></div>
+    </section>
+
+    <section class="card tabPanel hidden" id="websitePanel">
+      <h2>Website Management</h2>
+      <p class="muted">Announcements save to Firestore. To show them publicly, the public website must also be connected to the siteContent collection.</p>
+      <form id="announcementForm">
+        <label for="announcementTitle">Announcement Title</label>
+        <input id="announcementTitle" required maxlength="120">
+        <label for="announcementText">Announcement Text</label>
+        <textarea id="announcementText" required maxlength="1000"></textarea>
+        <button type="submit">Save Announcement</button>
+      </form>
+      <h3>Saved Website Content</h3>
+      <button type="button" id="loadContentBtn">Load Content</button>
+      <div class="table-wrap" id="contentTable"></div>
+    </section>
+  </section>
+</main>
+
+<footer>ANVPS Admin · Keep student and payment data private.</footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import {
+    getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+  import {
+    getFirestore, collection, getDocs, addDoc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+  // Firebase Console > Project settings > Your apps > Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDPQNf38Abzi01ysHey5GDPa77NIALHnw0",
+    authDomain: "anv-public-school.firebaseapp.com",
+    projectId: "anv-public-school",
+    appId: "1:549207509375:web:efe695091a65f84992b24a"
+  };
+
+  // Replace this with the exact UID from Firebase Authentication > Users.
+  const ADMIN_UID = "PASTE_ADMIN_UID_HERE";
+  const ADMIN_EMAIL = "anvpublicschoolnagaliyamev2018@gmail.com";
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const $ = id => document.getElementById(id);
+
+  let currentUser = null;
+  let students = [];
+  let examSettings = null;
+
+  function setStatus(text) { $("status").textContent = text; }
+  function setLoginStatus(text) { $("loginStatus").textContent = text; }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;",
+      '"': "&quot;", "'": "&#39;"
+    })[char]);
+  }
+
+  function authorized() {
+    return currentUser &&
+      currentUser.uid === ADMIN_UID &&
+      (currentUser.email || "").toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  }
+
+  async function getRecords(collectionName) {
+    if (!authorized()) throw new Error("Admin authorization required.");
+    const snapshot = await getDocs(collection(db, collectionName));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  }
+
+  function renderTable(targetId, records, columns) {
+    const target = $(targetId);
+    target.replaceChildren();
+
+    if (!records.length) {
+      target.textContent = "No records found.";
+      return;
+    }
+
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    const headRow = document.createElement("tr");
+
+    columns.forEach(([label]) => {
+      const th = document.createElement("th");
+      th.textContent = label;
+      headRow.appendChild(th);
+    });
+
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+    const tbody = document.createElement("tbody");
+
+    records.forEach(record => {
+      const tr = document.createElement("tr");
+      columns.forEach(([, field]) => {
+        const td = document.createElement("td");
+        const value = record[field];
+        td.textContent = value && typeof value === "object" && value.seconds
+          ? new Date(value.seconds * 1000).toLocaleString()
+          : (value == null ? "" : String(value));
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    target.appendChild(table);
+  }
+
+  async function loadAdmissions() {
+    const records = await getRecords("admissionEnquiries");
+    renderTable("admissionTable", records, [
+      ["Student", "studentName"], ["Class", "classApplying"],
+      ["Parent", "parentName"], ["Phone", "phone"],
+      ["Status", "status"], ["Created", "createdAt"]
+    ]);
+    $("admissionCount").textContent = records.length;
+  }
+
+  async function loadPayments() {
+    const records = await getRecords("feePayments");
+    renderTable("paymentTable", records, [
+      ["Student / Admission No.", "admissionNumber"],
+      ["Amount", "amount"], ["Currency", "currency"],
+      ["Status", "status"], ["Payment Reference", "paymentReference"],
+      ["Created", "createdAt"]
+    ]);
+    $("paymentCount").textContent = records.length;
+  }
+
+  async function loadStudents() {
+    students = await getRecords("students");
+    students.sort((a, b) =>
+      String(a.studentName || "").localeCompare(String(b.studentName || ""))
+    );
+    renderTable("studentTable", students, [
+      ["Name", "studentName"], ["Class", "studentClass"],
+      ["Admission No.", "admissionNumber"], ["Roll No.", "rollNumber"],
+      ["Guardian", "parentName"]
+    ]);
+    $("studentCount").textContent = students.length;
+  }
+
+  async function loadContent() {
+    const records = await getRecords("siteContent");
+    renderTable("contentTable", records, [
+      ["Type", "type"], ["Title", "title"], ["Text", "text"], ["Created", "createdAt"]
+    ]);
+    $("contentCount").textContent = records.length;
+  }
+
+  async function refreshAll() {
+    if (!authorized()) return;
+    setStatus("Refreshing records...");
+    try {
+      const results = await Promise.allSettled([
+        loadAdmissions(), loadPayments(), loadStudents(), loadContent()
+      ]);
+      const failures = results.filter(result => result.status === "rejected");
+      setStatus(failures.length
+        ? "Some collections could not load. Check Firestore Rules and setup."
+        : "Dashboard data refreshed.");
+      if (failures.length) {
+        console.error("Collection load errors:", failures.map(item => item.reason));
+      }
+    } catch (error) {
+      setStatus("Refresh failed: " + error.message);
+    }
+  }
+
+  $("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    $("loginBtn").disabled = true;
+    setLoginStatus("Signing in...");
+    try {
+      const email = $("email").value.trim().toLowerCase();
+      if (email !== ADMIN_EMAIL.toLowerCase()) {
+        throw new Error("This email is not the configured admin email.");
+      }
+      await signInWithEmailAndPassword(auth, email, $("password").value);
+      $("password").value = "";
+      setLoginStatus("");
+    } catch (error) {
+      setLoginStatus(error.code === "auth/invalid-credential"
+        ? "Email or password is incorrect."
+        : "Login failed: " + error.message);
+    } finally {
+      $("loginBtn").disabled = false;
+    }
+  });
+
+  onAuthStateChanged(auth, async user => {
+    currentUser = user;
+
+    if (!user) {
+      $("loginCard").classList.remove("hidden");
+      $("dashboard").classList.add("hidden");
+      return;
+    }
+
+    if (!ADMIN_UID || ADMIN_UID === "PASTE_ADMIN_UID_HERE" || !authorized()) {
+      await signOut(auth);
+      $("loginCard").classList.remove("hidden");
+      $("dashboard").classList.add("hidden");
+      setLoginStatus("Admin UID is not configured correctly.");
+      return;
+    }
+
+    $("loginCard").classList.add("hidden");
+    $("dashboard").classList.remove("hidden");
+    $("signedInAs").textContent = "Signed in: " + user.email;
+    await refreshAll();
+  });
+
+  $("logoutBtn").addEventListener("click", async () => {
+    await signOut(auth);
+    setLoginStatus("Logged out.");
+  });
+
+  $("refreshBtn").addEventListener("click", refreshAll);
+  $("loadAdmissionsBtn").addEventListener("click", () =>
+    loadAdmissions().catch(error => setStatus("Admissions error: " + error.message)));
+  $("loadPaymentsBtn").addEventListener("click", () =>
+    loadPayments().catch(error => setStatus("Payment error: " + error.message)));
+  $("loadStudentsBtn").addEventListener("click", () =>
+    loadStudents().catch(error => setStatus("Student error: " + error.message)));
+  $("loadContentBtn").addEventListener("click", () =>
+    loadContent().catch(error => setStatus("Content error: " + error.message)));
+
+  document.querySelectorAll("[data-tab]").forEach(button => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".tabPanel").forEach(panel => {
+        panel.classList.toggle("hidden", panel.id !== button.dataset.tab);
+      });
+    });
+  });
+
+  $("studentForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!authorized()) return;
+
+    const admissionNumber = $("admissionNumber").value.trim();
+    if (students.some(s => s.admissionNumber === admissionNumber)) {
+      setStatus("This admission number already exists in the loaded student list.");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "students"), {
+        studentName: $("studentName").value.trim(),
+        admissionNumber,
+        studentClass: $("studentClass").value,
+        rollNumber: $("rollNumber").value.trim(),
+        parentName: $("parentName").value.trim(),
+        photoUrl: $("studentPhotoUrl").value.trim(),
+        createdAt: serverTimestamp()
+      });
+      event.target.reset();
+      setStatus("Student record saved.");
+      await loadStudents();
+    } catch (error) {
+      setStatus("Could not save student: " + error.message);
+    }
+  });
+
+  $("announcementForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!authorized()) return;
+
+    try {
+      await addDoc(collection(db, "siteContent"), {
+        type: "announcement",
+        title: $("announcementTitle").value.trim(),
+        text: $("announcementText").value.trim(),
+        createdAt: serverTimestamp()
+      });
+      event.target.reset();
+      setStatus("Announcement saved in Firestore. Public website integration is separate.");
+      await loadContent();
+    } catch (error) {
+      setStatus("Could not save announcement: " + error.message);
+    }
+  });
+
+  $("admitForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!authorized()) {
+      $("admitStatus").textContent = "Admin authorization required.";
+      return;
+    }
+
+    const startDate = $("examStart").value;
+    const endDate = $("examEnd").value;
+    if (endDate < startDate) {
+      $("admitStatus").textContent = "Exam end date must not be before start date.";
+      return;
+    }
+
+    examSettings = {
+      examType: $("examType").value,
+      examTitle: $("examTitle").value.trim(),
+      session: $("examSession").value.trim(),
+      studentClass: $("examClass").value,
+      startDate,
+      endDate,
+      logoUrl: $("logoUrl").value.trim(),
+      instructions: $("examInstructions").value.trim()
     };
 
-    // Yahan wahi email likhein jo Firebase Users mein admin ke liye banayi.
-    const ADMIN_EMAIL = "anvpublicschoolnagaliyamev2018@gmail.com";
+    $("admitStatus").textContent = "Loading class students...";
+    $("admitControls").classList.add("hidden");
+    $("printArea").replaceChildren();
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    try {
+      await loadStudents();
+      const classStudents = students.filter(s =>
+        s.studentClass === examSettings.studentClass
+      );
 
-    const form = document.getElementById("loginForm");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const loginButton = document.getElementById("loginButton");
-    const dashboard = document.getElementById("dashboard");
-    const adminEmail = document.getElementById("adminEmail");
-    const status = document.getElementById("status");
+      const select = $("singleStudent");
+      select.replaceChildren();
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "Select student";
+      select.appendChild(placeholder);
 
-    function showDashboard(user) {
-      form.classList.add("hidden");
-      dashboard.classList.remove("hidden");
-      adminEmail.textContent = "Signed in as: " + user.email;
-    }
-
-    function showLogin() {
-      dashboard.classList.add("hidden");
-      form.classList.remove("hidden");
-      passwordInput.value = "";
-    }
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        showLogin();
-        return;
-      }
-
-      if ((user.email || "").toLowerCase() !==
-          ADMIN_EMAIL.toLowerCase()) {
-        await signOut(auth);
-        showLogin();
-        status.textContent = "Is account ko admin access nahi hai.";
-        return;
-      }
-
-      showDashboard(user);
-      status.textContent = "";
-    });
-
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      loginButton.disabled = true;
-      status.textContent = "Signing in...";
-
-      try {
-        const email = emailInput.value.trim().toLowerCase();
-
-        if (email !== ADMIN_EMAIL.toLowerCase()) {
-          throw new Error("Admin email match nahi karta.");
-        }
-
-        await signInWithEmailAndPassword(
-          auth, email, passwordInput.value
-        );
-
-        status.textContent = "Login successful.";
-      } catch (error) {
-        const messages = {
-          "auth/invalid-credential":
-            "Email ya password sahi nahi hai.",
-          "auth/too-many-requests":
-            "Bahut attempts hue. Kuch der baad try karein.",
-          "auth/network-request-failed":
-            "Internet connection check karein."
-        };
-
-        status.textContent =
-          messages[error.code] || error.message ||
-          "Login nahi ho saka. Settings check karein.";
-      } finally {
-        loginButton.disabled = false;
-      }
-    });
-
-    document.getElementById("logoutButton")
-      .addEventListener("click", async () => {
-        try {
-          await signOut(auth);
-          status.textContent = "Logout successful.";
-        } catch {
-          status.textContent = "Logout nahi ho saka.";
-        }
+      classStudents.forEach(student => {
+        const option = document.createElement("option");
+        option.value = student.id;
+        option.textContent =
+          `${student.studentName} — Roll ${student.rollNumber || "Not assigned"}`;
+        select.appendChild(option);
       });
-  </script>
+
+      $("admitControls").classList.toggle("hidden", classStudents.length === 0);
+      $("admitStatus").textContent = classStudents.length
+        ? `${classStudents.length} student(s) found.`
+        : "No students found. Add student records first.";
+    } catch (error) {
+      $("admitStatus").textContent = "Could not load students: " + error.message;
+    }
+  });
+
+  function buildAdmitCard(student) {
+    const exam = examSettings;
+    const logo = exam.logoUrl
+      ? `<img class="school-logo" src="${escapeHTML(exam.logoUrl)}" alt="School logo">`
+      : "";
+
+    const photo = student.photoUrl &&
+      /^https:\/\//i.test(student.photoUrl)
+      ? `<img class="admit-photo" src="${escapeHTML(student.photoUrl)}" alt="Student photo">`
+      : "";
+
+    return `
+      <article class="admit-card">
+        ${logo}
+        <h2>ANMOL NEW VENUS PUBLIC SCHOOL</h2>
+        <h3>Nagaliya Mev, Gajraula, Amroha, Uttar Pradesh</h3>
+        <h3>Session ${escapeHTML(exam.session)}</h3>
+        <hr>
+        <h2>ADMIT CARD</h2>
+        <h3>${escapeHTML(exam.examType)}</h3>
+        <p><b>Examination:</b> ${escapeHTML(exam.examTitle)}</p>
+        <div class="admit-row">
+          <span><b>Class:</b> ${escapeHTML(student.studentClass)}</span>
+          <span><b>Roll No.:</b> ${escapeHTML(student.rollNumber || "Not assigned")}</span>
+        </div>
+        <hr>
+        <div class="admit-row">
+          <div class="admit-details">
+            <p><b>Student Name:</b> ${escapeHTML(student.studentName)}</p>
+            <p><b>Admission No.:</b> ${escapeHTML(student.admissionNumber || "Not assigned")}</p>
+            <p><b>Parent / Guardian:</b> ${escapeHTML(student.parentName || "—")}</p>
+            <p><b>Exam Start:</b> ${escapeHTML(exam.startDate)}</p>
+            <p><b>Exam End:</b> ${escapeHTML(exam.endDate)}</p>
+          </div>
+          ${photo}
+        </div>
+        <hr>
+        <p><b>Instructions:</b> ${escapeHTML(exam.instructions)}</p>
+        <div class="signature-row">
+          <span>Parent Signature</span>
+          <span>Class Teacher</span>
+          <span>Principal</span>
+        </div>
+      </article>`;
+  }
+
+  $("singleCardBtn").addEventListener("click", () => {
+    if (!authorized() || !examSettings) return;
+    const student = students.find(s => s.id === $("singleStudent").value);
+    if (!student) {
+      $("admitStatus").textContent = "Please select a student.";
+      return;
+    }
+    $("printArea").innerHTML = buildAdmitCard(student);
+    $("admitStatus").textContent = "Single admit card generated.";
+  });
+
+  $("bulkCardBtn").addEventListener("click", () => {
+    if (!authorized() || !examSettings) return;
+    const classStudents = students.filter(s =>
+      s.studentClass === examSettings.studentClass
+    );
+    if (!classStudents.length) {
+      $("admitStatus").textContent = "No students available for this class.";
+      return;
+    }
+    $("printArea").innerHTML = classStudents.map(buildAdmitCard).join("");
+    $("admitStatus").textContent =
+      `${classStudents.length} admit cards generated. Use Print / Save as PDF.`;
+  });
+
+  $("printCardsBtn").addEventListener("click", () => {
+    if (!authorized() || !$("printArea").children.length) {
+      $("admitStatus").textContent = "Generate at least one admit card first.";
+      return;
+    }
+    window.print();
+  });
+</script>
 </body>
 </html>
-
