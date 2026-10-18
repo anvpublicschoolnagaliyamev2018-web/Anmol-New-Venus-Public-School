@@ -83,6 +83,245 @@ th, td {
     max-width: 100%;
   }
 }
+/* ===== ANVPS PREMIUM 3D ANIMATED THEME ===== */
+
+:root {
+  --anv-navy: #07152f;
+  --anv-blue: #174a9b;
+  --anv-gold: #f5bd35;
+  --anv-glass: rgba(255, 255, 255, 0.78);
+  --anv-shadow: 0 15px 35px rgba(9, 35, 82, 0.16);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(
+    -45deg,
+    #eaf0ff,
+    #f8faff,
+    #dce8ff,
+    #f5f7ff
+  );
+  background-size: 400% 400%;
+  animation: anvBackground 16s ease infinite;
+  color: #17233d;
+  overflow-x: hidden;
+}
+
+@keyframes anvBackground {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Header with 3D depth */
+header {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    #07152f,
+    #102b63,
+    #174a9b
+  );
+  color: white;
+  border-bottom: 3px solid var(--anv-gold);
+  border-radius: 0 0 26px 26px;
+  box-shadow: 0 12px 30px rgba(7, 21, 47, 0.28);
+}
+
+header::before {
+  content: "";
+  position: absolute;
+  top: -80%;
+  left: -60%;
+  width: 45%;
+  height: 250%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.17),
+    transparent
+  );
+  transform: rotate(25deg);
+  animation: anvShine 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes anvShine {
+  0%, 100% { left: -60%; }
+  50% { left: 130%; }
+}
+
+/* 3D Cards and sections */
+.card,
+.stat,
+section,
+#loginCard {
+  background: var(--anv-glass);
+  border: 1px solid rgba(255,255,255,0.85);
+  border-radius: 18px;
+  box-shadow: var(--anv-shadow);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.card:hover,
+.stat:hover,
+section:hover,
+#loginCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 22px 42px rgba(9, 35, 82, 0.22);
+  border-color: rgba(245,189,53,0.75);
+}
+
+/* Buttons with glow */
+button {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #102b63, #2160b5);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  padding: 11px 18px;
+  font-weight: 700;
+  box-shadow: 0 6px 15px rgba(16,43,99,0.23);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 10px 25px rgba(23,74,155,0.3),
+    0 0 12px rgba(245,189,53,0.25);
+}
+
+button:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Golden accent links */
+a {
+  transition: color 0.25s ease;
+}
+
+a:hover {
+  color: #c28a00;
+}
+
+/* Modern form fields */
+input,
+select,
+textarea {
+  max-width: 100%;
+  box-sizing: border-box;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid #d4deef;
+  border-radius: 11px;
+  padding: 11px 13px;
+  transition: all 0.25s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--anv-blue);
+  box-shadow: 0 0 0 3px rgba(23,74,155,0.13);
+  transform: translateY(-1px);
+}
+
+/* Premium table */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(9,35,82,0.09);
+}
+
+th {
+  background: linear-gradient(135deg, #07152f, #174a9b);
+  color: white;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(20,50,100,0.08);
+}
+
+tbody tr {
+  transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+  background: rgba(245,189,53,0.12);
+}
+
+/* Smooth entrance animation */
+main,
+.container {
+  animation: anvEntrance 0.8s ease both;
+}
+
+@keyframes anvEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile friendly */
+@media (max-width: 600px) {
+  header {
+    border-radius: 0 0 18px 18px;
+  }
+
+  .card,
+  .stat,
+  section,
+  #loginCard {
+    border-radius: 14px;
+  }
+
+  .card:hover,
+  .stat:hover,
+  section:hover,
+  #loginCard:hover {
+    transform: translateY(-2px);
+  }
+
+  th, td {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  button {
+    max-width: 100%;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 </style></head><body><header><h1>ANMOL NEW VENUS PUBLIC SCHOOL</h1><p>Student Portal · Session 2026–27</p></header><main>
 <section class="card" id="loginCard"><h2>Student Login</h2><p class="muted">Use the email and password issued for your student account.</p><form id="loginForm"><label for="email">Student Email</label><input id="email" type="email" required autocomplete="username"><label for="password">Password</label><input id="password" type="password" required autocomplete="current-password"><p><button id="loginBtn">Login</button></p></form><p id="loginStatus" role="status"></p><a href="index.html">← Back to School Website</a></section>
 <section class="hidden" id="portal"><div class="card"><p id="studentWelcome"></p><button id="refreshBtn" class="secondary">Refresh</button> <button id="logoutBtn" class="secondary">Logout</button><p id="portalStatus" role="status"></p></div><section class="card"><h2>My Admit Cards</h2><p class="muted">Only cards published for your signed-in account are shown here.</p><div id="cards">Loading…</div><button id="printBtn" class="secondary">Print / Save visible cards as PDF</button></section></section>
