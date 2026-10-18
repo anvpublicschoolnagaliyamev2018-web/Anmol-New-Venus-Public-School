@@ -503,8 +503,7 @@
       $("dashboard").classList.add("hidden");
       return;
     }
-
-    if (!ADMIN_UID || ADMIN_UID === "8hJOs07Bl9eGu9CAtmYqxhwiVGD2" || !authorized()) {
+if (!ADMIN_UID || !authorized()) {
       await signOut(auth);
       $("loginCard").classList.remove("hidden");
       $("dashboard").classList.add("hidden");
