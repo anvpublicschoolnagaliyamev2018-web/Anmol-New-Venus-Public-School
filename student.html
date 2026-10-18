@@ -2,6 +2,87 @@
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#102b63"><title>ANVPS Student Portal</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fc;color:#17233b;font-family:Arial,sans-serif}header{background:linear-gradient(120deg,#091c42,#174a9b);border-bottom:4px solid #f5bd35;color:white;padding:22px max(16px,calc((100% - 1000px)/2))}header h1{margin:0 0 6px;font-size:22px}header p{margin:0;color:#dce7ff}main{max-width:1000px;margin:24px auto;padding:0 14px 40px}.card{background:white;border:1px solid #dce4f1;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 5px 22px #102b630c}h2,h3{color:#102b63;margin-top:0}label{display:block;margin:12px 0 6px;font-weight:bold}input{width:100%;padding:12px;border:1px solid #ccd5e4;border-radius:8px;font:inherit}button,.btn{display:inline-block;border:0;border-radius:8px;padding:11px 15px;background:#174a9b;color:white;font-weight:bold;cursor:pointer;text-decoration:none}.secondary{background:#e7edf8;color:#102b63}.hidden{display:none!important}.muted{color:#687790;font-size:13px;line-height:1.5}.item{border:1px solid #dce4f1;border-radius:10px;background:#f7f9fd;padding:15px;margin:12px 0}.item p{line-height:1.5}.admit-card{border:2px solid #102b63;padding:22px;margin:15px 0;background:#fff;color:#102b63;break-inside:avoid}.school-logo{display:block;width:65px;height:65px;object-fit:contain;margin:0 auto 8px}.admit-card h2,.admit-card h3{text-align:center;margin:7px}.admit-card hr{border:0;border-top:1px solid #ccd5e4;margin:14px 0}.row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.signatures{display:flex;justify-content:space-between;gap:20px;margin-top:45px;text-align:center;font-size:12px}.signatures span{border-top:1px solid #102b63;padding-top:7px}@media print{body *{visibility:hidden!important}#cards,#cards *{visibility:visible!important}#cards{position:absolute;left:0;top:0;width:100%}.admit-card{page-break-after:always;break-after:page}@page{size:A4 portrait;margin:12mm}}
+/* ANVPS Premium Student Portal Theme */
+:root {
+  --anv-navy: #102b63;
+  --anv-blue: #174a9b;
+  --anv-gold: #f5bd35;
+  --anv-bg: #f3f6fc;
+}
+
+body {
+  background: linear-gradient(135deg, #f3f6fc, #e5edfb);
+}
+
+header {
+  background: linear-gradient(135deg, #102b63, #174a9b);
+  color: white;
+  padding: 22px 16px;
+  border-radius: 0 0 22px 22px;
+  box-shadow: 0 8px 24px rgba(16, 43, 99, 0.18);
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 43, 99, 0.18);
+}
+
+input, select, textarea {
+  max-width: 100%;
+  border: 1px solid #d6deed;
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid #f5bd35;
+  outline-offset: 1px;
+}
+
+.card, section {
+  border-radius: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th {
+  background: #102b63;
+  color: white;
+}
+
+th, td {
+  padding: 11px;
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 18px 12px;
+  }
+
+  th, td {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  button {
+    max-width: 100%;
+  }
+}
 </style></head><body><header><h1>ANMOL NEW VENUS PUBLIC SCHOOL</h1><p>Student Portal · Session 2026–27</p></header><main>
 <section class="card" id="loginCard"><h2>Student Login</h2><p class="muted">Use the email and password issued for your student account.</p><form id="loginForm"><label for="email">Student Email</label><input id="email" type="email" required autocomplete="username"><label for="password">Password</label><input id="password" type="password" required autocomplete="current-password"><p><button id="loginBtn">Login</button></p></form><p id="loginStatus" role="status"></p><a href="index.html">← Back to School Website</a></section>
 <section class="hidden" id="portal"><div class="card"><p id="studentWelcome"></p><button id="refreshBtn" class="secondary">Refresh</button> <button id="logoutBtn" class="secondary">Logout</button><p id="portalStatus" role="status"></p></div><section class="card"><h2>My Admit Cards</h2><p class="muted">Only cards published for your signed-in account are shown here.</p><div id="cards">Loading…</div><button id="printBtn" class="secondary">Print / Save visible cards as PDF</button></section></section>
