@@ -322,15 +322,30 @@ tbody tr:hover {
       <option value="">Select Student</option>
     </select>
 
-    <label for="resultSubject">Subject Name</label>
-    <input id="resultSubject" required maxlength="100"
-      placeholder="e.g. Mathematics">
+    
+<div class="result-subjects">
+  <h3>Subject-wise Marks</h3>
+  <div id="subjectRows"></div>
 
-    <div class="two-col">
-      <div>
-        <label for="resultMaxMarks">Maximum Marks</label>
-        <input id="resultMaxMarks" type="number"
-          min="1" max="1000" required>
+  <button type="button" id="addSubjectBtn" class="secondary">
+    + Add Subject
+  </button>
+
+  <div class="two-col" style="margin-top:15px">
+    <div>
+      <label>Total Obtained Marks</label>
+      <input id="totalObtained" readonly value="0">
+    </div>
+    <div>
+      <label>Total Maximum Marks</label>
+      <input id="totalMaximum" readonly value="0">
+    </div>
+  </div>
+
+  <label>Overall Percentage</label>
+  <input id="overallPercentage" readonly value="0%">
+</div>
+
       </div>
       <div>
         <label for="resultObtained">Obtained Marks</label>
