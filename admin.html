@@ -291,6 +291,70 @@ tbody tr:hover {
 <section class="card tabPanel hidden" id="admitPanel"><h2>Admit Card Generator & Publisher</h2><p class="muted">Publishing creates one private card per student. Students can only query cards linked to their authenticated UID.</p><form id="admitForm"><div class="two-col"><div><label for="examType">Exam Type</label><select id="examType" required><option>Unit Test 1st</option><option>Unit Test 2nd</option><option>Half Yearly Examination</option><option>Annual Examination</option></select></div><div><label for="examTitle">Exam Title</label><input id="examTitle" required maxlength="100" placeholder="Unit Test 1st - October 2026"></div><div><label for="examSession">Session</label><input id="examSession" value="2026–27" required maxlength="20"></div><div><label for="examClass">Class</label><select id="examClass" required><option value="">Select Class</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div><div><label for="examStart">Exam Start Date</label><input id="examStart" type="date" required></div><div><label for="examEnd">Exam End Date</label><input id="examEnd" type="date" required></div></div><label for="examInstructions">Instructions</label><textarea id="examInstructions" maxlength="500">Please arrive on time and bring the required stationery. Follow all instructions given by the invigilator.</textarea><button type="submit" id="loadExamStudentsBtn">Load Students for Class</button></form><p id="admitStatus" role="status"></p><div id="admitControls" class="hidden"><label for="singleStudent">Select Student</label><select id="singleStudent"><option value="">Select student</option></select><div class="toolbar"><button id="singleCardBtn">Preview Single Card</button><button id="bulkCardBtn">Preview Whole Class</button><button id="publishCardsBtn">Publish Cards for Class</button><button id="printCardsBtn" class="secondary">Print / Save Preview PDF</button></div></div><div id="printArea"></div></section>
 <section class="card tabPanel hidden" id="syllabusPanel"><h2>Add Syllabus PDF Link</h2><p class="muted">Free option: upload the PDF into your GitHub repository (for example, a syllabus/ folder), then paste its public PDF URL below. This page does not upload files to Firebase Storage.</p><form id="syllabusForm"><div class="two-col"><div><label for="syllabusTitle">Title</label><input id="syllabusTitle" required maxlength="120" placeholder="Class 3 Unit Test 1 Syllabus"></div><div><label for="uploadClass">Class</label><select id="uploadClass" required><option value="">Select Class</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div><div><label for="uploadExam">Exam Type</label><select id="uploadExam" required><option>Unit Test 1st</option><option>Unit Test 2nd</option><option>Half Yearly Examination</option><option>Annual Examination</option></select></div><div><label for="uploadSession">Session</label><input id="uploadSession" value="2026–27" required maxlength="20"></div></div><label for="syllabusUrl">Public PDF URL</label><input id="syllabusUrl" type="url" required placeholder="https://.../syllabus/class-3-unit-test-1.pdf"><p class="muted">Use a direct HTTPS link to a PDF. Anyone with the link may be able to open it.</p><label><input id="syllabusPublished" type="checkbox" checked style="width:auto"> Publish immediately</label><button id="uploadSyllabusBtn" type="submit">Upload Syllabus</button></form><h3>Saved Syllabus</h3><button id="loadSyllabusBtn" class="secondary">Load Syllabus</button><div class="table-wrap" id="syllabusTable"></div></section>
 <section class="card tabPanel hidden" id="noticePanel"><h2>Notice Board Management</h2><form id="noticeForm"><label for="noticeTitle">Notice Title</label><input id="noticeTitle" required maxlength="120"><label for="noticeText">Notice Details</label><textarea id="noticeText" required maxlength="2000"></textarea><div class="two-col"><div><label for="noticeClass">Audience</label><select id="noticeClass"><option value="All Classes">All Classes</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div><div><label><input id="noticePublished" type="checkbox" checked style="width:auto"> Publish on public website</label></div></div><button type="submit">Save Notice</button></form><h3>Saved Notices</h3><button id="loadNoticesBtn" class="secondary">Load Notices</button><div class="table-wrap" id="noticeTable"></div></section>
+
+<section class="card tabPanel hidden" id="resultPanel">
+  <h2>Marks & Result Management</h2>
+
+  <form id="resultForm">
+    <label for="resultExam">Exam Type</label>
+    <select id="resultExam" required>
+      <option value="Unit Test 1st">Unit Test 1st</option>
+      <option value="Unit Test 2nd">Unit Test 2nd</option>
+      <option value="Half-Yearly Examination">Half-Yearly Examination</option>
+      <option value="Annual Examination">Annual Examination</option>
+      <option value="Practical">Practical</option>
+    </select>
+
+    <label for="resultClass">Class</label>
+    <select id="resultClass" required>
+      <option>Nursery</option>
+      <option>LKG</option>
+      <option>UKG</option>
+      <option>Class 1</option>
+      <option>Class 2</option>
+      <option>Class 3</option>
+      <option>Class 4</option>
+      <option>Class 5</option>
+    </select>
+
+    <label for="resultStudent">Student</label>
+    <select id="resultStudent" required>
+      <option value="">Select Student</option>
+    </select>
+
+    <label for="resultSubject">Subject Name</label>
+    <input id="resultSubject" required maxlength="100"
+      placeholder="e.g. Mathematics">
+
+    <div class="two-col">
+      <div>
+        <label for="resultMaxMarks">Maximum Marks</label>
+        <input id="resultMaxMarks" type="number"
+          min="1" max="1000" required>
+      </div>
+      <div>
+        <label for="resultObtained">Obtained Marks</label>
+        <input id="resultObtained" type="number"
+          min="0" max="1000" required>
+      </div>
+    </div>
+
+    <label for="resultPublished">
+      <input id="resultPublished" type="checkbox"
+        checked style="width:auto">
+      Publish result for student
+    </label>
+
+    <button type="submit">Save Result</button>
+  </form>
+
+  <h3>Saved Results</h3>
+  <button type="button" id="loadResultsBtn" class="secondary">
+    Load Results
+  </button>
+  <div class="table-wrap" id="resultsTable"></div>
+</section>
+  
 </section></main><footer>ANVPS Admin · Keep student and payment data private.</footer>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
