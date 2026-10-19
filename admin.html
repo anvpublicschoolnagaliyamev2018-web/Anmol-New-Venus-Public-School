@@ -517,8 +517,92 @@ async function loadResultStudents() {
       select.append(option);
     });
 }
+function addSubjectRow(subject = "", maxMarks = "", obtainedMarks = "") {
+  const container = $("subjectRows");
+  const row = document.createElement("div");
+  row.className = "two-col subject-row";
+  row.style.marginBottom = "12px";
 
-async function loadResults() {
+  function makeField(labelText, className, type, value, min) {
+    const box = document.createElement("div");
+    const label = document.createElement("label");
+    label.textContent = labelText;
+
+    const input = document.createElement("input");
+    input.type = type;
+    input.className = className;
+    input.required = true;
+    input.value = value;
+
+    if (type === "number") {
+      input.min = min;
+      input.max = "1000";
+    } else {
+      input.maxLength = 100;
+      input.placeholder = "Subject name";
+    }
+
+    box.append(label, input);
+    return { box, input };
+  }
+
+  const name = makeField("Subject Name", "subject-name", "text", subject);
+  const max = makeField("Maximum Marks", "subject-max", "number", maxMarks, "1");
+  const obtained = makeField("Obtained Marks", "subject-obtained", "number", obtainedMarks, "0");
+
+  const action = document.createElement("div");
+  const label = document.createElement("label");
+  label.textContent = "Action";
+
+  const remove = document.createElement("button");
+  remove.type = "button";
+  remove.className = "small danger";
+  remove.textContent = "Remove";
+  remove.onclick = () => {
+    if (container.querySelectorAll(".subject-row").length <= 1) {
+      msg("status", "At least one subject is required.");
+      return;
+    }
+    row.remove();
+    calculateResultTotals();
+  };
+
+  action.append(label, remove);
+  row.append(name.box, max.box, obtained.box, action);
+  container.append(row);
+
+  [max.input, obtained.input].forEach(input =>
+    input.addEventListener("input", calculateResultTotals)
+  );
+
+  calculateResultTotals();
+}
+
+function calculateResultTotals() {
+  let totalMax = 0;
+  let totalObtained = 0;
+
+  document.querySelectorAll("#subjectRows .subject-row").forEach(row => {
+    const max = Number(row.querySelector(".subject-max").value);
+    const obtained = Number(row.querySelector(".subject-obtained").value);
+
+    if (row.querySelector(".subject-max").value && max > 0) totalMax += max;
+    if (row.querySelector(".subject-obtained").value && obtained >= 0) {
+      totalObtained += obtained;
+    }
+  });
+
+  $("totalMaximum").value = totalMax;
+  $("totalObtained").value = totalObtained;
+  $("overallPercentage").value =
+    totalMax > 0 ? ((totalObtained / totalMax) * 100).toFixed(2) + "%" : "0%";
+}
+
+$("addSubjectBtn").addEventListener("click", () => addSubjectRow());
+
+addSubjectRow();
+
+  async function loadResults() {
   const rows = await records("results");
 
   table("resultsTable", rows, [
