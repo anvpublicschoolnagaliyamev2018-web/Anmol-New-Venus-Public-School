@@ -358,6 +358,30 @@ table("studentTable", filtered, [
   wrap.append(editBtn);
 });
 
+const deleteBtn = document.createElement("button");
+deleteBtn.className = "small danger";
+deleteBtn.textContent = "Delete";
+
+deleteBtn.onclick = async () => {
+  if (!authorized()) return;
+
+  const confirmed = confirm(
+    `Kya tum ${student.studentName} ka student record delete karna chahte ho?`
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await deleteDoc(doc(db, "students", student.id));
+    await loadStudents();
+    msg("status", "Student record deleted successfully.");
+  } catch (err) {
+    msg("status", "Delete failed: " + err.message);
+  }
+};
+
+wrap.append(deleteBtn);
+      
 
   if (!filtered.length) {
     $("studentTable").textContent = "No matching students found.";
