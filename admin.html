@@ -325,12 +325,39 @@ function renderStudents() {
     return matchesSearch && matchesClass;
   });
 
-  table("studentTable", filtered, [
-    ["Name", "studentName"],
-    ["Class", "studentClass"],
-    ["Admission No.", "admissionNumber"],
-    ["Roll", "rollNumber"]
-  ]);
+  
+table("studentTable", filtered, [
+  ["Name", "studentName"],
+  ["Class", "studentClass"],
+  ["Admission No.", "admissionNumber"],
+  ["Roll", "rollNumber"]
+], (student, wrap) => {
+  const editBtn = document.createElement("button");
+  editBtn.className = "small";
+  editBtn.textContent = "Edit";
+
+  editBtn.onclick = () => {
+    if (!authorized()) return;
+
+    $("studentName").value = student.studentName || "";
+    $("admissionNumber").value = student.admissionNumber || "";
+    $("studentClass").value = student.studentClass || "";
+    $("rollNumber").value = student.rollNumber || "";
+    $("parentName").value = student.parentName || "";
+    $("studentUid").value = student.studentUid || "";
+    $("studentPhotoUrl").value = student.photoUrl || "";
+
+    $("studentForm").dataset.editId = student.id;
+    $("studentForm").scrollIntoView({ behavior: "smooth" });
+
+    const saveBtn = $("studentForm").querySelector('button[type="submit"]');
+    saveBtn.textContent = "Update Student";
+    msg("status", "Student details edit karein, phir Update Student dabayein.");
+  };
+
+  wrap.append(editBtn);
+});
+
 
   if (!filtered.length) {
     $("studentTable").textContent = "No matching students found.";
@@ -359,7 +386,73 @@ document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>document.queryS
 $("loadStudentsBtn").onclick=()=>loadStudents().catch(e=>msg("status",e.message));$("loadSyllabusBtn").onclick=()=>loadSyllabus().catch(e=>msg("status",e.message));$("loadNoticesBtn").onclick=()=>loadNotices().catch(e=>msg("status",e.message));
   $("studentSearch").addEventListener("input", renderStudents);
 $("studentFilter").addEventListener("change", renderStudents);
-$("studentForm").addEventListener("submit",async e=>{e.preventDefault();if(!authorized())return;let admissionNumber=$("admissionNumber").value.trim(),studentUid=$("studentUid").value.trim();if(students.some(s=>s.admissionNumber===admissionNumber)){msg("status","Admission number already exists.");return}if(!studentUid){msg("status","Student Firebase UID is required.");return}try{await addDoc(collection(db,"students"),{studentName:$("studentName").value.trim(),admissionNumber,studentClass:$("studentClass").value,rollNumber:$("rollNumber").value.trim(),parentName:$("parentName").value.trim(),studentUid,photoUrl:$("studentPhotoUrl").value.trim(),createdAt:serverTimestamp()});e.target.reset();await loadStudents();msg("status","Student record saved. Student login must exist in Firebase Authentication with this UID.")}catch(err){msg("status","Could not save student: "+err.message)}});
+
+$("studentForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!authorized()) return;
+
+  const form = $("studentForm");
+  const editId = form.dataset.editId || "";
+  const admissionNumber = $("admissionNumber").value.trim();
+  const studentUid = $("studentUid").value.trim();
+
+  if (
+    students.some(
+      s => s.admissionNumber === admissionNumber && s.id !== editId
+    )
+  ) {
+    msg("status", "Admission number already exists.");
+    return;
+  }
+
+  if (!studentUid) {
+    msg("status", "Student Firebase UID is required.");
+    return;
+  }
+
+  const studentData = {
+    studentName: $("studentName").value.trim(),
+    admissionNumber,
+    studentClass: $("studentClass").value,
+    rollNumber: $("rollNumber").value.trim(),
+    parentName: $("parentName").value.trim(),
+    studentUid,
+    photoUrl: $("studentPhotoUrl").value.trim()
+  };
+
+  const saveBtn = form.querySelector('button[type="submit"]');
+  saveBtn.disabled = true;
+
+  try {
+    if (editId) {
+      await updateDoc(doc(db, "students", editId), {
+        ...studentData,
+        updatedAt: serverTimestamp()
+      });
+    } else {
+      await addDoc(collection(db, "students"), {
+        ...studentData,
+        createdAt: serverTimestamp()
+      });
+    }
+
+    form.reset();
+    delete form.dataset.editId;
+    saveBtn.textContent = "Add Student Record";
+
+    await loadStudents();
+
+    msg(
+      "status",
+      editId ? "Student record updated successfully." : "Student record saved successfully."
+    );
+  } catch (err) {
+    msg("status", "Could not save student: " + err.message);
+  } finally {
+    saveBtn.disabled = false;
+  }
+});
+
 $("syllabusForm").addEventListener("submit",async e=>{e.preventDefault();if(!authorized())return;const downloadURL=$("syllabusUrl").value.trim();if(!/^https:\/\//i.test(downloadURL)){msg("status","Paste a valid HTTPS PDF link.");return}const btn=$("uploadSyllabusBtn");btn.disabled=true;try{const title=$("syllabusTitle").value.trim(),studentClass=$("uploadClass").value,examType=$("uploadExam").value,session=$("uploadSession").value.trim();await addDoc(collection(db,"syllabus"),{title,studentClass,examType,session,downloadURL,published:$("syllabusPublished").checked,createdAt:serverTimestamp(),createdBy:currentUser.uid});e.target.reset();$("uploadSession").value="2026–27";$("syllabusPublished").checked=true;await loadSyllabus();msg("status","Syllabus link saved successfully.")}catch(err){msg("status","Could not save syllabus link: "+err.message+". Check Firestore rules.")}finally{btn.disabled=false}});
 $("noticeForm").addEventListener("submit",async e=>{e.preventDefault();if(!authorized())return;try{await addDoc(collection(db,"siteContent"),{type:"announcement",title:$("noticeTitle").value.trim(),text:$("noticeText").value.trim(),audience:$("noticeClass").value,published:$("noticePublished").checked,createdAt:serverTimestamp(),createdBy:currentUser.uid});e.target.reset();$("noticePublished").checked=true;await loadNotices();msg("status","Notice saved.")}catch(err){msg("status","Could not save notice: "+err.message)}});
 $("admitForm").addEventListener("submit",async e=>{e.preventDefault();if(!authorized())return;const start=$("examStart").value,end=$("examEnd").value;if(end<start){msg("admitStatus","End date must not be before start date.");return}examSettings={examType:$("examType").value,examTitle:$("examTitle").value.trim(),session:$("examSession").value.trim(),studentClass:$("examClass").value,startDate:start,endDate:end,instructions:$("examInstructions").value.trim()};msg("admitStatus","Loading students…");$("printArea").replaceChildren();try{await loadStudents();classStudents=students.filter(s=>s.studentClass===examSettings.studentClass&&s.studentUid);const sel=$("singleStudent");sel.replaceChildren(new Option("Select student",""));classStudents.forEach(s=>sel.add(new Option(`${s.studentName} — Roll ${s.rollNumber}`,s.id)));$("admitControls").classList.toggle("hidden",!classStudents.length);msg("admitStatus",classStudents.length?`${classStudents.length} student(s) with linked login found.`:"No students with a linked Firebase UID found in this class.")}catch(err){msg("admitStatus",err.message)}});
