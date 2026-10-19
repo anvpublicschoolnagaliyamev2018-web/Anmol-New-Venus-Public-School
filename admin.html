@@ -680,75 +680,108 @@ addSubjectRow();
 
 $("resultClass").addEventListener("change", loadResultStudents);
 
+
 $("resultForm").addEventListener("submit", async e => {
   e.preventDefault();
   if (!authorized()) return;
 
   const form = $("resultForm");
-  const editId = form.dataset.editId || "";
   const studentUid = $("resultStudent").value;
   const student = students.find(s => s.studentUid === studentUid);
-  const subject = $("resultSubject").value.trim();
-  const maxMarks = Number($("resultMaxMarks").value);
-  const obtainedMarks = Number($("resultObtained").value);
+  const editId = form.dataset.editId || "";
+  const subjectRows = [
+    ...document.querySelectorAll("#subjectRows .subject-row")
+  ];
 
   if (!student) {
-    msg("status", "Select a valid student.");
+    msg("status", "Please select a student.");
     return;
   }
 
-  if (
-    !subject ||
-    !Number.isFinite(maxMarks) ||
-    !Number.isFinite(obtainedMarks) ||
-    maxMarks <= 0 ||
-    obtainedMarks < 0 ||
-    obtainedMarks > maxMarks
-  ) {
-    msg("status", "Check subject and marks. Obtained marks cannot exceed maximum marks.");
+  if (!subjectRows.length) {
+    msg("status", "Please add at least one subject.");
     return;
   }
 
-  const resultData = {
-    studentUid,
-    studentName: student.studentName,
-    admissionNumber: student.admissionNumber || "",
-    studentClass: student.studentClass,
-    examType: $("resultExam").value,
-    subject,
-    maxMarks,
-    obtainedMarks,
-    percentage: Number(((obtainedMarks / maxMarks) * 100).toFixed(2)),
-    published: $("resultPublished").checked,
-    updatedAt: serverTimestamp()
-  };
+  const subjects = subjectRows.map(row => ({
+    subject: row.querySelector(".subject-name").value.trim(),
+    maxMarks: Number(row.querySelector(".subject-max").value),
+    obtainedMarks: Number(row.querySelector(".subject-obtained").value)
+  }));
+
+  if (subjects.some(s =>
+    !s.subject ||
+    !Number.isFinite(s.maxMarks) ||
+    !Number.isFinite(s.obtainedMarks) ||
+    s.maxMarks < 1 ||
+    s.maxMarks > 1000 ||
+    s.obtainedMarks < 0 ||
+    s.obtainedMarks > s.maxMarks
+  )) {
+    msg("status", "Check all subjects and marks. Obtained marks cannot exceed maximum marks.");
+    return;
+  }
+
+  const subjectNames = subjects.map(s => s.subject.toLowerCase());
+  if (new Set(subjectNames).size !== subjectNames.length) {
+    msg("status", "Duplicate subject names are not allowed.");
+    return;
+  }
 
   const saveBtn = form.querySelector('button[type="submit"]');
   saveBtn.disabled = true;
 
   try {
-    if (editId) {
-      await updateDoc(doc(db, "results", editId), resultData);
-    } else {
-      await addDoc(collection(db, "results"), {
-        ...resultData,
-        createdAt: serverTimestamp()
-      });
+    const commonData = {
+      studentUid,
+      studentName: student.studentName,
+      admissionNumber: student.admissionNumber || "",
+      studentClass: student.studentClass,
+      examType: $("resultExam").value,
+      published: $("resultPublished").checked,
+      updatedAt: serverTimestamp()
+    };
+
+    // Edit the existing record for the first subject, if editing.
+    for (let i = 0; i < subjects.length; i++) {
+      const s = subjects[i];
+      const resultData = {
+        ...commonData,
+        subject: s.subject,
+        maxMarks: s.maxMarks,
+        obtainedMarks: s.obtainedMarks,
+        percentage: Number(
+          ((s.obtainedMarks / s.maxMarks) * 100).toFixed(2)
+        )
+      };
+
+      if (editId && i === 0) {
+        await updateDoc(doc(db, "results", editId), resultData);
+      } else {
+        await addDoc(collection(db, "results"), {
+          ...resultData,
+          createdAt: serverTimestamp()
+        });
+      }
     }
 
     form.reset();
     delete form.dataset.editId;
     saveBtn.textContent = "Save Result";
 
+    $("subjectRows").replaceChildren();
+    addSubjectRow();
+
     await loadResultStudents();
     await loadResults();
-    msg("status", editId ? "Marks updated." : "Marks saved.");
+    msg("status", "Subject marks saved successfully.");
   } catch (err) {
     msg("status", "Could not save marks: " + err.message);
   } finally {
     saveBtn.disabled = false;
   }
 });
+  
 
 $("loadResultsBtn").addEventListener("click", () =>
   loadResults().catch(e => msg("status", e.message))
