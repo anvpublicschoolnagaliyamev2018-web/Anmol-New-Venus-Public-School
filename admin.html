@@ -943,7 +943,7 @@ $("loadResultsBtn").addEventListener("click", () =>
   loadResults().catch(e => msg("status", e.message))
 );
 
-  onAuthStateChanged(auth,async u=>{currentUser=u;if(!u){$("loginCard").classList.remove("hidden");$("dashboard").classList.add("hidden");return}if(!authorized()){await signOut(auth);$("loginCard").classList.remove("hidden");$("dashboard").classList.add("hidden");msg("loginStatus","Admin UID/email does not match. Verify ADMIN_UID against Firebase Authentication > Users.");return}$("loginCard").classList.add("hidden");$("dashboard").classList.remove("hidden");$("signedInAs").textContent="Signed in: "+u.email;await refresh()});
+  onAuthStateChanged(auth,async u=>{currentUser=u;alert(u ? "Firebase user found: " + u.email : "Firebase user is NULL");if(!u){$("loginCard").classList.remove("hidden");$("dashboard").classList.add("hidden");return}if(!authorized()){await signOut(auth);$("loginCard").classList.remove("hidden");$("dashboard").classList.add("hidden");msg("loginStatus","Admin UID/email does not match. Verify ADMIN_UID against Firebase Authentication > Users.");return}$("loginCard").classList.add("hidden");$("dashboard").classList.remove("hidden");$("signedInAs").textContent="Signed in: "+u.email;await refresh()});
 $("logoutBtn").onclick=()=>signOut(auth);$("refreshBtn").onclick=refresh;
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>document.querySelectorAll(".tabPanel").forEach(p=>p.classList.toggle("hidden",p.id!==b.dataset.tab)));
 $("loadStudentsBtn").onclick=()=>loadStudents().catch(e=>msg("status",e.message));$("loadSyllabusBtn").onclick=()=>loadSyllabus().catch(e=>msg("status",e.message));$("loadNoticesBtn").onclick=()=>loadNotices().catch(e=>msg("status",e.message));
