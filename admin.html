@@ -465,7 +465,176 @@ async function loadNotices(){let r=await records("siteContent");r=r.filter(x=>x.
 async function loadAdmitCount(){let r=await records("admitCards");$("admitCount").textContent=r.length}
 async function refresh(){if(!authorized())return;msg("status","Refreshing…");try{await Promise.all([loadStudents(),loadSyllabus(),loadNotices(),loadAdmitCount()]);msg("status","Dashboard refreshed.")}catch(e){msg("status","Could not load some data: "+(e.code?e.code+" — ":"")+e.message)}}
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginBtn").disabled=true;msg("loginStatus","Signing in…");try{if($("email").value.trim().toLowerCase()!==ADMIN_EMAIL.toLowerCase())throw Error("This email is not the configured admin email.");await signInWithEmailAndPassword(auth,ADMIN_EMAIL,$("password").value);$("password").value="";msg("loginStatus","")}catch(e){msg("loginStatus",e.code==="auth/invalid-credential"?"Email or password is incorrect.":"Login failed: "+e.message)}finally{$("loginBtn").disabled=false}});
-onAuthStateChanged(auth,async u=>{currentUser=u;if(!u){$("loginCard").classList.remove("hidden");$("dashboard").classList.add("hidden");return}if(!authorized()){await signOut(auth);$("loginCard").classList.remove("hidden");$("dashboard").classList.add("hidden");msg("loginStatus","Admin UID/email does not match. Verify ADMIN_UID against Firebase Authentication > Users.");return}$("loginCard").classList.add("hidden");$("dashboard").classList.remove("hidden");$("signedInAs").textContent="Signed in: "+u.email;await refresh()});
+
+async function loadResultStudents() {
+  const className = $("resultClass").value;
+  const select = $("resultStudent");
+  select.replaceChildren(new Option("Select Student", ""));
+
+  students
+    .filter(s => s.studentClass === className && s.studentUid)
+    .forEach(s => {
+      const option = new Option(
+        `${s.studentName} (${s.admissionNumber || "No admission no."})`,
+        s.studentUid
+      );
+      select.append(option);
+    });
+}
+
+async function loadResults() {
+  const rows = await records("results");
+
+  table("resultsTable", rows, [
+    ["Student", "studentName"],
+    ["Class", "studentClass"],
+    ["Exam", "examType"],
+    ["Subject", "subject"],
+    ["Maximum", "maxMarks"],
+    ["Obtained", "obtainedMarks"],
+    ["Percentage", "percentage"],
+    ["Published", "published"]
+  ], (r, wrap) => {
+    const edit = document.createElement("button");
+    edit.className = "small";
+    edit.textContent = "Edit";
+
+    edit.onclick = () => {
+      $("resultExam").value = r.examType;
+      $("resultClass").value = r.studentClass;
+      loadResultStudents().then(() => {
+        $("resultStudent").value = r.studentUid;
+      });
+
+      $("resultSubject").value = r.subject;
+      $("resultMaxMarks").value = r.maxMarks;
+      $("resultObtained").value = r.obtainedMarks;
+      $("resultPublished").checked = !!r.published;
+      $("resultForm").dataset.editId = r.id;
+
+      $("resultForm").scrollIntoView({ behavior: "smooth" });
+      $("resultForm").querySelector('button[type="submit"]').textContent =
+        "Update Marks";
+    };
+
+    wrap.append(edit);
+
+    const publish = document.createElement("button");
+    publish.className = "small";
+    publish.textContent = r.published ? "Unpublish" : "Publish";
+
+    publish.onclick = async () => {
+      try {
+        await updateDoc(doc(db, "results", r.id), {
+          published: !r.published
+        });
+        await loadResults();
+        msg("status", "Result publication status updated.");
+      } catch (e) {
+        msg("status", "Could not update result: " + e.message);
+      }
+    };
+
+    wrap.append(publish);
+
+    const del = document.createElement("button");
+    del.className = "small danger";
+    del.textContent = "Delete";
+
+    del.onclick = async () => {
+      if (!confirm(`Delete ${r.subject} marks for ${r.studentName}?`))
+        return;
+
+      try {
+        await deleteDoc(doc(db, "results", r.id));
+        await loadResults();
+        msg("status", "Subject marks deleted.");
+      } catch (e) {
+        msg("status", "Delete failed: " + e.message);
+      }
+    };
+
+    wrap.append(del);
+  });
+}
+
+$("resultClass").addEventListener("change", loadResultStudents);
+
+$("resultForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!authorized()) return;
+
+  const form = $("resultForm");
+  const editId = form.dataset.editId || "";
+  const studentUid = $("resultStudent").value;
+  const student = students.find(s => s.studentUid === studentUid);
+  const subject = $("resultSubject").value.trim();
+  const maxMarks = Number($("resultMaxMarks").value);
+  const obtainedMarks = Number($("resultObtained").value);
+
+  if (!student) {
+    msg("status", "Select a valid student.");
+    return;
+  }
+
+  if (
+    !subject ||
+    !Number.isFinite(maxMarks) ||
+    !Number.isFinite(obtainedMarks) ||
+    maxMarks <= 0 ||
+    obtainedMarks < 0 ||
+    obtainedMarks > maxMarks
+  ) {
+    msg("status", "Check subject and marks. Obtained marks cannot exceed maximum marks.");
+    return;
+  }
+
+  const resultData = {
+    studentUid,
+    studentName: student.studentName,
+    admissionNumber: student.admissionNumber || "",
+    studentClass: student.studentClass,
+    examType: $("resultExam").value,
+    subject,
+    maxMarks,
+    obtainedMarks,
+    percentage: Number(((obtainedMarks / maxMarks) * 100).toFixed(2)),
+    published: $("resultPublished").checked,
+    updatedAt: serverTimestamp()
+  };
+
+  const saveBtn = form.querySelector('button[type="submit"]');
+  saveBtn.disabled = true;
+
+  try {
+    if (editId) {
+      await updateDoc(doc(db, "results", editId), resultData);
+    } else {
+      await addDoc(collection(db, "results"), {
+        ...resultData,
+        createdAt: serverTimestamp()
+      });
+    }
+
+    form.reset();
+    delete form.dataset.editId;
+    saveBtn.textContent = "Save Result";
+
+    await loadResultStudents();
+    await loadResults();
+    msg("status", editId ? "Marks updated." : "Marks saved.");
+  } catch (err) {
+    msg("status", "Could not save marks: " + err.message);
+  } finally {
+    saveBtn.disabled = false;
+  }
+});
+
+$("loadResultsBtn").addEventListener("click", () =>
+  loadResults().catch(e => msg("status", e.message))
+);
+
+  onAuthStateChanged(auth,async u=>{currentUser=u;if(!u){$("loginCard").classList.remove("hidden");$("dashboard").classList.add("hidden");return}if(!authorized()){await signOut(auth);$("loginCard").classList.remove("hidden");$("dashboard").classList.add("hidden");msg("loginStatus","Admin UID/email does not match. Verify ADMIN_UID against Firebase Authentication > Users.");return}$("loginCard").classList.add("hidden");$("dashboard").classList.remove("hidden");$("signedInAs").textContent="Signed in: "+u.email;await refresh()});
 $("logoutBtn").onclick=()=>signOut(auth);$("refreshBtn").onclick=refresh;
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>document.querySelectorAll(".tabPanel").forEach(p=>p.classList.toggle("hidden",p.id!==b.dataset.tab)));
 $("loadStudentsBtn").onclick=()=>loadStudents().catch(e=>msg("status",e.message));$("loadSyllabusBtn").onclick=()=>loadSyllabus().catch(e=>msg("status",e.message));$("loadNoticesBtn").onclick=()=>loadNotices().catch(e=>msg("status",e.message));
