@@ -602,81 +602,238 @@ $("addSubjectBtn").addEventListener("click", () => addSubjectRow());
 
 addSubjectRow();
 
-  async function loadResults() {
-  const rows = await records("results");
+  
+$("resultForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!authorized()) return;
 
-  table("resultsTable", rows, [
-    ["Student", "studentName"],
-    ["Class", "studentClass"],
-    ["Exam", "examType"],
-    ["Subject", "subject"],
-    ["Maximum", "maxMarks"],
-    ["Obtained", "obtainedMarks"],
-    ["Percentage", "percentage"],
-    ["Published", "published"]
-  ], (r, wrap) => {
-    const edit = document.createElement("button");
-    edit.className = "small";
-    edit.textContent = "Edit";
+  const form = $("resultForm");
+  const studentUid = $("resultStudent").value;
+  const student = students.find(s => s.studentUid === studentUid);
+  const editId = form.dataset.editId || "";
+  const subjectRows = [
+    ...document.querySelectorAll("#subjectRows .subject-row")
+  ];
 
-    edit.onclick = () => {
-      $("resultExam").value = r.examType;
-      $("resultClass").value = r.studentClass;
-      loadResultStudents().then(() => {
-        $("resultStudent").value = r.studentUid;
-      });
+  if (!student) {
+    msg("status", "Please select a student.");
+    return;
+  }
 
-      $("resultSubject").value = r.subject;
-      $("resultMaxMarks").value = r.maxMarks;
-      $("resultObtained").value = r.obtainedMarks;
-      $("resultPublished").checked = !!r.published;
-      $("resultForm").dataset.editId = r.id;
+  if (!subjectRows.length) {
+    msg("status", "Please add at least one subject.");
+    return;
+  }
 
-      $("resultForm").scrollIntoView({ behavior: "smooth" });
-      $("resultForm").querySelector('button[type="submit"]').textContent =
-        "Update Marks";
+  const subjects = subjectRows.map(row => ({
+    subject: row.querySelector(".subject-name").value.trim(),
+    maxMarks: Number(row.querySelector(".subject-max").value),
+    obtainedMarks: Number(row.querySelector(".subject-obtained").value)
+  }));
+
+  if (subjects.some(s =>
+    !s.subject ||
+    !Number.isFinite(s.maxMarks) ||
+    !Number.isFinite(s.obtainedMarks) ||
+    s.maxMarks < 1 ||
+    s.maxMarks > 1000 ||
+    s.obtainedMarks < 0 ||
+    s.obtainedMarks > s.maxMarks
+  )) {
+    msg(
+      "status",
+      "Check all subjects and marks. Obtained marks cannot exceed maximum marks."
+    );
+    return;
+  }
+
+  const subjectNames = subjects.map(s => s.subject.toLowerCase());
+
+  if (new Set(subjectNames).size !== subjectNames.length) {
+    msg("status", "Duplicate subject names are not allowed.");
+    return;
+  }
+
+  const examType = $("resultExam").value;
+
+  const totalMaximum = subjects.reduce(
+    (sum, s) => sum + s.maxMarks, 0
+  );
+
+  const totalObtained = subjects.reduce(
+    (sum, s) => sum + s.obtainedMarks, 0
+  );
+
+  const percentage = Number(
+    ((totalObtained / totalMaximum) * 100).toFixed(2)
+  );
+
+  const saveBtn = form.querySelector('button[type="submit"]');
+  saveBtn.disabled = true;
+
+  try {
+    const existingRows = await records("results");
+
+    // Only new-format report cards count for duplicate checking.
+    const duplicate = existingRows.find(r =>
+      Array.isArray(r.subjects) &&
+      r.studentUid === studentUid &&
+      r.examType === examType &&
+      r.id !== editId
+    );
+
+    if (duplicate) {
+      msg(
+        "status",
+        "A report card for this student and exam already exists. Use its Edit button to update it."
+      );
+      return;
+    }
+
+    const resultData = {
+      schemaVersion: 2,
+      studentUid,
+      studentName: student.studentName,
+      admissionNumber: student.admissionNumber || "",
+      studentClass: student.studentClass,
+      examType,
+      subjects,
+      totalMaximum,
+      totalObtained,
+      percentage,
+      published: $("resultPublished").checked,
+      updatedAt: serverTimestamp()
     };
 
-    wrap.append(edit);
+    if (editId) {
+      const existing = existingRows.find(r => r.id === editId);
 
-    const publish = document.createElement("button");
-    publish.className = "small";
-    publish.textContent = r.published ? "Unpublish" : "Publish";
+      if (!existing || !Array.isArray(existing.subjects)) {
+        msg(
+          "status",
+          "This is an old-format record. It has not been changed."
+        );
 
-    publish.onclick = async () => {
-      try {
-        await updateDoc(doc(db, "results", r.id), {
-          published: !r.published
-        });
-        await loadResults();
-        msg("status", "Result publication status updated.");
-      } catch (e) {
-        msg("status", "Could not update result: " + e.message);
-      }
+$("resultForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!authorized()) return;
+
+  const form = $("resultForm");
+  const studentUid = $("resultStudent").value;
+  const student = students.find(s => s.studentUid === studentUid);
+  const editId = form.dataset.editId || "";
+  const subjectRows = [
+    ...document.querySelectorAll("#subjectRows .subject-row")
+  ];
+
+  if (!student) {
+    msg("status", "Please select a student.");
+    return;
+  }
+
+  if (!subjectRows.length) {
+    msg("status", "Please add at least one subject.");
+    return;
+  }
+
+  const subjects = subjectRows.map(row => ({
+    subject: row.querySelector(".subject-name").value.trim(),
+    maxMarks: Number(row.querySelector(".subject-max").value),
+    obtainedMarks: Number(row.querySelector(".subject-obtained").value)
+  }));
+
+  if (subjects.some(s =>
+    !s.subject ||
+    !Number.isFinite(s.maxMarks) ||
+    !Number.isFinite(s.obtainedMarks) ||
+    s.maxMarks < 1 ||
+    s.maxMarks > 1000 ||
+    s.obtainedMarks < 0 ||
+    s.obtainedMarks > s.maxMarks
+  )) {
+    msg("status", "Check subjects and marks. Obtained marks cannot exceed maximum marks.");
+    return;
+  }
+
+  const names = subjects.map(s => s.subject.toLowerCase());
+  if (new Set(names).size !== names.length) {
+    msg("status", "Duplicate subject names are not allowed.");
+    return;
+  }
+
+  const examType = $("resultExam").value;
+  const totalMaximum = subjects.reduce((sum, s) => sum + s.maxMarks, 0);
+  const totalObtained = subjects.reduce((sum, s) => sum + s.obtainedMarks, 0);
+  const percentage = Number(((totalObtained / totalMaximum) * 100).toFixed(2));
+
+  const saveBtn = form.querySelector('button[type="submit"]');
+  saveBtn.disabled = true;
+
+  try {
+    const existingRows = await records("results");
+
+    const duplicate = existingRows.find(r =>
+      Array.isArray(r.subjects) &&
+      r.studentUid === studentUid &&
+      r.examType === examType &&
+      r.id !== editId
+    );
+
+    if (duplicate) {
+      msg("status", "Report card already exists for this student and exam. Use Edit.");
+      return;
+    }
+
+    const resultData = {
+      schemaVersion: 2,
+      studentUid,
+      studentName: student.studentName,
+      admissionNumber: student.admissionNumber || "",
+      studentClass: student.studentClass,
+      examType,
+      subjects,
+      totalMaximum,
+      totalObtained,
+      percentage,
+      published: $("resultPublished").checked,
+      updatedAt: serverTimestamp()
     };
 
-    wrap.append(publish);
+    if (editId) {
+      const oldRecord = existingRows.find(r => r.id === editId);
 
-    const del = document.createElement("button");
-    del.className = "small danger";
-    del.textContent = "Delete";
-
-    del.onclick = async () => {
-      if (!confirm(`Delete ${r.subject} marks for ${r.studentName}?`))
+      if (!oldRecord || !Array.isArray(oldRecord.subjects)) {
+        msg("status", "Old-format record cannot be edited as a report card yet.");
         return;
-
-      try {
-        await deleteDoc(doc(db, "results", r.id));
-        await loadResults();
-        msg("status", "Subject marks deleted.");
-      } catch (e) {
-        msg("status", "Delete failed: " + e.message);
       }
-    };
 
-    wrap.append(del);
-  });
-}
+      await updateDoc(doc(db, "results", editId), resultData);
+    } else {
+      await addDoc(collection(db, "results"), {
+        ...resultData,
+        createdAt: serverTimestamp()
+      });
+    }
+
+    form.reset();
+    delete form.dataset.editId;
+    saveBtn.textContent = "Save Result";
+    $("subjectRows").replaceChildren();
+    addSubjectRow();
+    calculateResultTotals();
+
+    await loadResultStudents();
+    await loadResults();
+
+    msg("status", editId ? "Report card updated." : "Report card saved.");
+  } catch (err) {
+    msg("status", "Could not save report card: " + err.message);
+  } finally {
+    saveBtn.disabled = false;
+  }
+});
+
+
 
 $("resultClass").addEventListener("change", loadResultStudents);
 
