@@ -8,16 +8,18 @@
 */
 const CASHFREE_PAYMENT_LINK = "https://payments.cashfree.com/forms?code=anv-registration";
 
-// Intro screen
+
+/* ANVPS Premium Intro Timing */
 window.addEventListener("load", function () {
   const intro = document.getElementById("introScreen");
 
   if (intro) {
     window.setTimeout(function () {
       intro.classList.add("hide");
-    }, 1200);
+    }, 4200);
   }
 });
+
 
 // Mobile navigation
 const menuToggle = document.getElementById("menuToggle");
