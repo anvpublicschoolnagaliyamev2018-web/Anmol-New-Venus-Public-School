@@ -1015,134 +1015,66 @@ select {
     transform: none;
   }
 }
-/* ANVPS CINEMATIC INTRO */
-.intro-screen {
+/* ANVPS GIF INTRO SCREEN */
+#introScreen.intro-screen {
   position: fixed;
   inset: 0;
   z-index: 99999;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  background: #050b1c;
+  background: radial-gradient(circle, #174a9b 0%, #07152f 72%);
   color: #fff;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.9s ease, visibility 0.9s ease;
+  text-align: center;
+  padding: 20px;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
 }
 
-.intro-screen.hide {
+#introScreen .intro-logo {
+  display: block;
+  width: min(230px, 65vw);
+  height: auto;
+  max-height: 260px;
+  object-fit: contain;
+  margin-bottom: 22px;
+}
+
+#introScreen h1 {
+  color: #f5bd35;
+  font-size: clamp(22px, 5vw, 38px);
+  margin: 8px 0;
+  letter-spacing: 2px;
+}
+
+#introScreen p {
+  color: #fff;
+  margin: 8px 0 20px;
+}
+
+#introScreen .loader {
+  width: 46px;
+  height: 46px;
+  border: 4px solid rgba(255,255,255,.25);
+  border-top-color: #f5bd35;
+  border-radius: 50%;
+  animation: anvIntroSpin 1s linear infinite;
+}
+
+#introScreen.hide {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-.intro-video,
-.intro-overlay {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.intro-video {
-  object-fit: cover;
-}
-
-.intro-overlay {
-  background:
-    radial-gradient(ellipse at center,
-      transparent 10%, rgba(3, 8, 24, .45) 100%),
-    linear-gradient(0deg,
-      rgba(3, 8, 24, .88), transparent 70%);
-}
-
-.intro-content {
-  position: relative;
-  z-index: 2;
-  width: 90%;
-  text-align: center;
-  animation: introReveal 1.2s ease both;
-}
-
-.intro-logo {
-  width: clamp(100px, 24vw, 170px);
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 0 18px rgba(245, 189, 53, .65));
-  animation: logoFloat 3s ease-in-out infinite;
-}
-
-.intro-content h1 {
-  margin: 22px 0 4px;
-  color: #fff;
-  font-size: clamp(24px, 6vw, 42px);
-  font-weight: 800;
-  letter-spacing: 2px;
-  text-shadow: 0 0 22px rgba(23, 74, 155, .8);
-}
-
-.intro-content h2 {
-  margin: 0;
-  color: #f5bd35;
-  font-size: clamp(17px, 4vw, 28px);
-  letter-spacing: 5px;
-}
-
-.intro-line {
-  width: 100px;
-  height: 3px;
-  margin: 20px auto;
-  background: linear-gradient(90deg, transparent, #f5bd35, transparent);
-  animation: lineGlow 2s ease-in-out infinite;
-}
-
-.intro-content p {
-  font-size: 13px;
-  letter-spacing: 4px;
-}
-
-.intro-session {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 8px 16px;
-  border: 1px solid rgba(245, 189, 53, .65);
-  border-radius: 30px;
-  color: #f5bd35;
-  font-size: 11px;
-  letter-spacing: 2px;
-}
-
-.skip-intro {
-  position: absolute;
-  z-index: 3;
-  right: 20px;
-  bottom: 25px;
-  padding: 10px 16px;
-  border: 1px solid rgba(245, 189, 53, .6);
-  border-radius: 30px;
-  background: rgba(5, 11, 28, .65);
-  color: white;
-  cursor: pointer;
-}
-
-@keyframes introReveal {
-  from { opacity: 0; transform: translateY(25px) scale(.96); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@keyframes logoFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
-}
-
-@keyframes lineGlow {
-  0%, 100% { opacity: .55; transform: scaleX(.7); }
-  50% { opacity: 1; transform: scaleX(1.2); }
+@keyframes anvIntroSpin {
+  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro-content, .intro-logo, .intro-line {
+  #introScreen,
+  #introScreen .loader {
     animation: none;
+    transition: none;
   }
 }
