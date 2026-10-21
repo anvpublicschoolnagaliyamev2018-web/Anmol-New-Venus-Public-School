@@ -16,10 +16,8 @@ window.addEventListener("load", function () {
 
   if (intro) {
     window.setTimeout(function () {
-      intro.classList.add("hide");
-    }, 1200);
-  }
-});
+  intro.classList.add("hide");
+}, 4500);
 
 
 
