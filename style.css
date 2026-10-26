@@ -1080,3 +1080,309 @@ select {
   opacity: 0 !important;
   visibility: hidden !important;
 }
+/* ==========================================
+ANV PUBLIC SCHOOL — PREMIUM UI/UX UPGRADE
+Add this CSS at the END of style.css
+Existing website features remain untouched
+========================================== */
+
+:root {
+--anv-navy: #07152f;
+--anv-blue: #174a9b;
+--anv-blue-light: #2875d8;
+--anv-gold: #f5bd35;
+--anv-white: #ffffff;
+--anv-glass: rgba(255, 255, 255, 0.08);
+--anv-border: rgba(245, 189, 53, 0.25);
+--anv-shadow: 0 12px 35px rgba(3, 15, 38, 0.16);
+--anv-transition: 0.3s ease;
+}
+
+/* 1. Smooth page experience */
+html {
+scroll-behavior: smooth;
+scroll-padding-top: 90px;
+}
+
+body {
+overflow-x: hidden;
+-webkit-tap-highlight-color: transparent;
+}
+
+img {
+max-width: 100%;
+}
+
+/* 2. Premium selection color */
+::selection {
+background: var(--anv-gold);
+color: var(--anv-navy);
+}
+
+/* 3. Modern headings */
+h1, h2, h3, h4 {
+text-wrap: balance;
+}
+
+h1, h2 {
+letter-spacing: -0.4px;
+}
+
+/* 4. Navigation interaction */
+nav a,
+.nav-links a,
+header a,
+.navbar a {
+transition:
+color var(--anv-transition),
+background var(--anv-transition),
+transform var(--anv-transition);
+}
+
+nav a:hover,
+.nav-links a:hover,
+header a:hover,
+.navbar a:hover {
+color: var(--anv-gold);
+}
+
+nav a:focus-visible,
+a:focus-visible,
+button:focus-visible {
+outline: 3px solid var(--anv-gold);
+outline-offset: 4px;
+}
+
+/* 5. Premium cards
+Targets common card patterns without changing content */
+.card,
+.feature-card,
+.facility-card,
+.fee-card,
+.teacher-card,
+.gallery-item,
+.notice-card,
+.service-card,
+.course-card,
+.info-card {
+border: 1px solid rgba(23, 74, 155, 0.12);
+border-radius: 18px;
+box-shadow: var(--anv-shadow);
+transition:
+transform 0.35s ease,
+box-shadow 0.35s ease,
+border-color 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+.card:hover,
+.feature-card:hover,
+.facility-card:hover,
+.fee-card:hover,
+.teacher-card:hover,
+.gallery-item:hover,
+.notice-card:hover,
+.service-card:hover,
+.course-card:hover,
+.info-card:hover {
+transform: translateY(-7px);
+box-shadow: 0 20px 45px rgba(7, 21, 47, 0.2);
+border-color: var(--anv-border);
+}
+}
+
+/* 6. Buttons — smooth premium feel */
+button,
+.btn,
+.button,
+a.btn,
+input[type="submit"],
+input[type="button"] {
+transition:
+transform 0.25s ease,
+box-shadow 0.25s ease,
+filter 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+button:hover,
+.btn:hover,
+.button:hover,
+a.btn:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+transform: translateY(-2px);
+box-shadow: 0 9px 22px rgba(7, 21, 47, 0.18);
+filter: brightness(1.06);
+}
+}
+
+button:active,
+.btn:active,
+.button:active,
+input[type="submit"]:active {
+transform: scale(0.97);
+}
+
+/* 7. Premium image treatment */
+.gallery img,
+.gallery-item img,
+.card img,
+.feature-card img,
+.facility-card img,
+.teacher-card img {
+transition:
+transform 0.55s ease,
+filter 0.45s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+.gallery-item:hover img,
+.gallery img:hover,
+.card:hover img,
+.feature-card:hover img,
+.facility-card:hover img,
+.teacher-card:hover img {
+transform: scale(1.035);
+filter: saturate(1.08);
+}
+}
+
+/* 8. Form fields — clean interaction */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+select,
+textarea {
+transition:
+border-color 0.25s ease,
+box-shadow 0.25s ease,
+background-color 0.25s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+outline: none;
+border-color: var(--anv-blue-light) !important;
+box-shadow: 0 0 0 4px rgba(40, 117, 216, 0.13);
+}
+
+/* 9. Images and logos */
+.logo,
+.site-logo,
+.school-logo,
+header img {
+transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+.logo:hover,
+.site-logo:hover,
+.school-logo:hover {
+transform: scale(1.045);
+filter: drop-shadow(0 5px 12px rgba(245, 189, 53, 0.3));
+}
+}
+
+/* 10. Premium section separators */
+section {
+scroll-margin-top: 85px;
+}
+
+section h2 {
+text-decoration-color: var(--anv-gold);
+text-underline-offset: 8px;
+}
+
+/* 11. Soft entrance animation
+Applied to common content blocks */
+@keyframes anvSoftRise {
+from {
+opacity: 0;
+transform: translateY(16px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.hero-content,
+.section-heading {
+animation: anvSoftRise 0.7s ease both;
+}
+
+/* 12. Existing GIF intro — preserve its behavior */
+#introScreen {
+z-index: 999999;
+}
+
+#introScreen img.intro-logo {
+object-fit: contain;
+}
+
+/* Keep intro's existing hide transition */
+#introScreen.hide {
+pointer-events: none;
+}
+
+/* 13. Premium footer */
+footer {
+position: relative;
+overflow: hidden;
+}
+
+footer a {
+transition: color 0.25s ease;
+}
+
+footer a:hover {
+color: var(--anv-gold);
+}
+
+/* 14. Mobile touch-friendly experience */
+@media (max-width: 768px) {
+html {
+scroll-padding-top: 72px;
+}
+
+.card,
+.feature-card,
+.facility-card,
+.fee-card,
+.teacher-card,
+.gallery-item,
+.notice-card,
+.service-card,
+.course-card,
+.info-card {
+border-radius: 14px;
+}
+
+button,
+.btn,
+.button,
+input[type="submit"] {
+min-height: 42px;
+}
+
+.hero-content,
+.section-heading {
+animation-duration: 0.45s;
+}
+}
+
+/* 15. Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+html {
+scroll-behavior: auto;
+}
+
+*,
+*::before,
+*::after {
+animation-duration: 0.01ms !important;
+animation-iteration-count: 1 !important;
+transition-duration: 0.01ms !important;
+scroll-behavior: auto !important;
+}
+}
