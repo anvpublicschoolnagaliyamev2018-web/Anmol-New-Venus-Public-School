@@ -1567,3 +1567,25 @@ transform: scale(0.98);
 }
 
 /* ===== END HERO ANIMATION FIX ===== */
+/* ANVPS HERO HEADING ANIMATION FIX */
+.hero h1,
+.hero h2 {
+  animation: anvHeroEnter 0.8s ease both;
+}
+
+.hero p {
+  animation: anvHeroEnter 0.8s 0.15s ease both;
+}
+
+.hero .hero-actions {
+  animation: anvHeroEnter 0.8s 0.3s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero h1,
+  .hero h2,
+  .hero p,
+  .hero .hero-actions {
+    animation: none !important;
+  }
+}
