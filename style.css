@@ -1521,3 +1521,49 @@ transition-duration: .01ms !important;
 }
 
 /* ===== END ANVPS TARGETED PREMIUM UI PATCH ===== */
+
+/* ===== ANVPS HERO ANIMATION FIX ===== */
+
+.hero h2 {
+animation: anvHeroEnter 0.8s ease both;
+}
+
+.hero-content > p {
+animation: anvHeroEnter 0.8s 0.15s ease both;
+}
+
+.hero-actions {
+animation: anvHeroEnter 0.8s 0.3s ease both;
+}
+
+.eyebrow {
+animation: anvHeroEnter 0.8s 0.1s ease both;
+}
+
+/* Improve card motion */
+.highlight-card,
+.class-card,
+.payment-card,
+.gallery-item {
+transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+.highlight-card:hover,
+.class-card:hover,
+.payment-card:hover,
+.gallery-item:hover {
+transform: translateY(-6px);
+box-shadow: 0 18px 35px rgba(7, 21, 47, 0.18);
+}
+}
+
+/* Better touch feedback on phones */
+.btn:active,
+button:active,
+.highlight-card:active,
+.class-card:active {
+transform: scale(0.98);
+}
+
+/* ===== END HERO ANIMATION FIX ===== */
