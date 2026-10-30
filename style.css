@@ -2012,3 +2012,385 @@ input[type="submit"]:active {
 }
 
 /* ========== END ANV PREMIUM UI UPGRADE ========== */
+/* =================================================
+   ANVPS — ADVANCED UI + UX EXPERIENCE
+   Add this at the END of style.css
+   ================================================= */
+
+/* 1. DESIGN SYSTEM */
+:root {
+  --ux-primary: #102b63;
+  --ux-secondary: #174a9b;
+  --ux-accent: #f5bd35;
+  --ux-text: #17243b;
+  --ux-muted: #66758d;
+  --ux-surface: #ffffff;
+  --ux-background: #f5f8ff;
+  --ux-border: #e1e8f2;
+  --ux-radius: 18px;
+  --ux-radius-small: 12px;
+  --ux-shadow: 0 10px 30px rgba(16,43,99,.08);
+  --ux-shadow-hover: 0 18px 42px rgba(16,43,99,.15);
+}
+
+/* 2. BETTER READING EXPERIENCE */
+body {
+  color: var(--ux-text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+p {
+  color: var(--ux-muted);
+  line-height: 1.8;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+section {
+  scroll-margin-top: 90px;
+}
+
+/* 3. CONSISTENT SECTION SPACING */
+section {
+  position: relative;
+}
+
+.section-heading {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.section-heading h2 {
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.section-heading p {
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 4. NAVIGATION UX */
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-menu a {
+  position: relative;
+  text-decoration: none;
+}
+
+.nav-menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background: var(--ux-accent);
+  transition: width .25s ease;
+}
+
+.nav-menu a:hover::after {
+  width: 100%;
+}
+
+/* 5. HERO CALL-TO-ACTION */
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero-actions .btn {
+  min-height: 48px;
+  padding: 13px 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+/* 6. BUTTON INTERACTION */
+.btn,
+button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--ux-accent);
+  outline-offset: 4px;
+}
+
+.btn:active,
+button:active {
+  transform: scale(.97);
+}
+
+button:disabled,
+.btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 7. CARD UX */
+.highlight-card,
+.class-card,
+.fee-card,
+.fee-panel,
+.payment-card,
+.contact-panel {
+  border-radius: var(--ux-radius);
+  background: var(--ux-surface);
+  box-shadow: var(--ux-shadow);
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    border-color .3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .highlight-card:hover,
+  .class-card:hover,
+  .fee-card:hover,
+  .fee-panel:hover,
+  .payment-card:hover,
+  .contact-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--ux-shadow-hover);
+  }
+}
+
+/* 8. ADMISSION FORM UX */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--ux-primary);
+  font-weight: 700;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 15px;
+  border: 1px solid var(--ux-border);
+  border-radius: var(--ux-radius-small);
+  background: #fff;
+  color: var(--ux-text);
+  font: inherit;
+  transition:
+    border-color .25s ease,
+    box-shadow .25s ease;
+}
+
+.form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #98a4b5;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--ux-secondary);
+  box-shadow: 0 0 0 4px rgba(23,74,155,.11);
+}
+
+.form-group input:invalid:not(:placeholder-shown) {
+  border-color: #d62828;
+}
+
+.form-group input:valid:not(:placeholder-shown) {
+  border-color: #23864b;
+}
+
+/* 9. PAYMENT SECTION */
+.payment-card {
+  padding: 26px;
+  border: 1px solid var(--ux-border);
+}
+
+.payment-card h3 {
+  color: var(--ux-primary);
+  margin-bottom: 12px;
+}
+
+.payment-card .btn {
+  width: 100%;
+  min-height: 48px;
+  justify-content: center;
+}
+
+/* 10. GALLERY UX */
+.gallery-item {
+  overflow: hidden;
+  border-radius: var(--ux-radius);
+  background: var(--ux-background);
+}
+
+.gallery-item img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  transition: transform .45s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery-item:hover img {
+    transform: scale(1.05);
+  }
+}
+
+/* 11. CONTACT AND FOOTER */
+.contact-panel {
+  padding: 25px;
+}
+
+.footer {
+  line-height: 1.8;
+}
+
+.footer a {
+  display: inline-block;
+  padding: 3px 0;
+}
+
+/* 12. FLOATING ACTION BUTTONS */
+.floating-actions {
+  z-index: 999;
+}
+
+.floating-btn {
+  min-width: 48px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 8px 22px rgba(7,21,47,.22);
+}
+
+/* 13. SCROLL REVEAL FALLBACK
+   Keep content visible if JavaScript is unavailable. */
+.reveal {
+  transition:
+    opacity .65s ease,
+    transform .65s ease;
+}
+
+/* 14. MOBILE FIRST IMPROVEMENTS */
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  section {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .hero {
+    min-height: 520px;
+  }
+
+  .hero-content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero-actions {
+    gap: 10px;
+  }
+
+  .hero-actions .btn {
+    min-height: 46px;
+    padding: 12px 18px;
+  }
+
+  .section-heading {
+    margin-bottom: 28px;
+  }
+
+  .highlight-card,
+  .class-card,
+  .fee-card,
+  .payment-card {
+    padding: 20px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px;
+  }
+}
+
+/* 15. SMALL PHONE SUPPORT */
+@media (max-width: 380px) {
+  .hero h2 {
+    font-size: 2rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .section-heading h2 {
+    font-size: 1.65rem;
+  }
+}
+
+/* 16. TABLET SUPPORT */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero {
+    min-height: 580px;
+  }
+
+  .section-heading {
+    max-width: 90%;
+  }
+}
+
+/* 17. ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* ========== END ADVANCED UI/UX ========== */
