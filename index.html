@@ -35,7 +35,43 @@
 <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
 <nav class="nav-menu" id="navMenu"><a href="#home">Home</a><a href="#about">About</a><a href="#classes">Classes</a><a href="#fees">Fee Structure</a><a href="#portal">Student Portal</a><a href="#notices">Notices</a><a href="#syllabus">Syllabus</a><a href="#gallery">Gallery</a><a href="#admission">Admission Enquiry</a></nav>
 </header>
-<main>
+  <!-- LIVE NOTICE TICKER -->
+<div class="anv-ticker" aria-label="Latest school notices">
+  <div class="ticker-label">LATEST NOTICES</div>
+  <div class="ticker-window">
+    <div id="noticeTickerTrack" class="ticker-track">
+      <span>Welcome to ANV Public School</span>
+    </div>
+  </div>
+</div>
+
+<!-- ADMISSION POPUP -->
+<div id="admissionPopup" class="admission-popup hidden"
+     role="dialog" aria-modal="true"
+     aria-labelledby="popupTitle">
+
+  <div class="admission-popup-card">
+    <button type="button" id="closeAdmissionPopup"
+            class="popup-close" aria-label="Close popup">×</button>
+
+    <div class="popup-top">ANV PUBLIC SCHOOL</div>
+
+    <div class="popup-content">
+      <span class="popup-badge">ADMISSIONS OPEN</span>
+      <h2 id="popupTitle">Give Your Child a Bright Future</h2>
+      <p id="popupMessage">
+        Admissions are open for Nursery to Class 5.
+      </p>
+      <p id="popupSession">Session 2026–27</p>
+
+      <a href="#admission" class="btn btn-primary">
+        APPLY FOR ADMISSION
+      </a>
+    </div>
+  </div>
+</div>
+
+  <main>
 <section class="hero" id="home"><div class="hero-overlay"></div><div class="hero-content reveal"><span class="eyebrow">SESSION 2026–27</span><h2>WELCOME TO THE ANV PUBLIC SCHOOL<span>Here!</span></h2><p>Welcome to ANV Public School. We encourage young minds to learn, grow and build a confident future.</p><div class="hero-actions"><a href="#admission" class="btn btn-primary">Enquire for Admission</a><a href="#fees" class="btn btn-outline">View Fee Structure</a></div><p class="admission-tag">Admissions Open: Nursery to Class 5</p></div></section>
 <section class="highlights container reveal"><article class="highlight-card"><span class="highlight-icon">📚</span><h3>Quality Education</h3><p>Strong learning foundations for every child.</p></article><article class="highlight-card"><span class="highlight-icon">🌱</span><h3>Overall Development</h3><p>Encouraging curiosity, confidence and creativity.</p></article><article class="highlight-card"><span class="highlight-icon">🤝</span><h3>Values & Discipline</h3><p>Building good habits and responsible learners.</p></article></section>
 <section class="section container" id="about"><div class="about-grid"><div class="about-image reveal"><img src="school-banner.jpg" alt="ANV Public School"><div class="image-label">Welcome to ANV Public School</div></div><div class="about-content reveal"><span class="section-kicker">ABOUT OUR SCHOOL</span><h2>Learning with Purpose, Growing with Confidence</h2><p>ANV Public School aims to provide children with a supportive environment where they can develop knowledge, discipline, confidence and a love of learning.</p><p>We focus on foundational learning and the overall development of students from Nursery to Class 5.</p><a href="#admission" class="text-link">Ask about admissions →</a></div></div></section>
