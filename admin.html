@@ -150,7 +150,164 @@ async function loadNotices(){let rows=await records("siteContent");rows=rows.fil
 async function loadAdmitCount(){const rows=await records("admitCards");$("admitCount").textContent=rows.length}
 async function loadResultStudents(){if(!authorized())return;const cls=$("resultClass").value,sel=$("resultStudent");sel.replaceChildren(new Option("Select Student",""));students.filter(s=>s.studentClass===cls&&s.studentUid).forEach(s=>sel.add(new Option(`${s.studentName} (${s.admissionNumber||"No admission no."})`,s.studentUid)))}
 async function loadResults(){const rows=await records("results");table("resultsTable",rows,[["Student","studentName"],["Class","studentClass"],["Exam","examType"],["Total","totalObtained"],["Maximum","totalMaximum"],["Percentage","percentage"],["Published","published"]],(r,w)=>{w.append(makeBtn("Edit","small",()=>{if(!Array.isArray(r.subjects)){msg("status","This is an older-format result and cannot be edited in the subject-wise editor.");return}$("resultExam").value=r.examType||"Unit Test 1st";$("resultClass").value=r.studentClass||"Nursery";loadResultStudents().then(()=>$("resultStudent").value=r.studentUid||"");$("subjectRows").replaceChildren();r.subjects.forEach(s=>addSubjectRow(s.subject,s.maxMarks,s.obtainedMarks));$("resultPublished").checked=!!r.published;$("resultForm").dataset.editId=r.id;$("resultForm").querySelector('[type=submit]').textContent="Update Result";$("cancelResultEdit").classList.remove("hidden");$("resultForm").scrollIntoView({behavior:"smooth"})}));w.append(makeBtn("Delete","small danger",async()=>{if(!confirm("Delete this result?"))return;await guarded(async()=>{await deleteDoc(doc(db,"results",r.id));await loadResults();msg("status","Result deleted.")})}))})}
-async function refresh(){if(!authorized())return;msg("status","Refreshing dashboard…");try{await Promise.all([loadStudents(),loadSyllabus(),loadNotices(),loadAdmitCount()]);await loadResults();msg("status","Dashboard refreshed.")}catch(e){msg("status","Could not load data: "+(e.code?e.code+" — ":"")+e.message)}}
+// ===== NEWS, EVENTS AND ADMISSION POPUP =====
+
+async function loadContentType(type, target) {
+  const all = await records("siteContent");
+  const rows = all
+    .filter(x => x.type === type)
+    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+  table(target, rows, [
+    ["Title", "title"],
+    ["Date", "eventDate"],
+    ["Published", "published"],
+    ["Details", "text"]
+  ], (x, w) => {
+    w.append(makeBtn(
+      x.published ? "Unpublish" : "Publish",
+      "small",
+      async () => {
+        await guarded(async () => {
+          await updateDoc(doc(db, "siteContent", x.id), {
+            published: !x.published
+          });
+          await loadContentType(type, target);
+          msg("status", "Content publication status updated.");
+        });
+      }
+    ));
+
+    w.append(makeBtn("Delete", "small danger", async () => {
+      if (!confirm("Delete this item?")) return;
+
+      await guarded(async () => {
+        await deleteDoc(doc(db, "siteContent", x.id));
+        await loadContentType(type, target);
+        msg("status", "Item deleted.");
+      });
+    }));
+  });
+}
+
+async function loadNews() {
+  await loadContentType("news", "newsTable");
+}
+
+async function loadEvents() {
+  await loadContentType("event", "eventTable");
+}
+
+$("newsForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!authorized()) return;
+
+  try {
+    await addDoc(collection(db, "siteContent"), {
+      type: "news",
+      title: $("newsTitle").value.trim(),
+      text: $("newsText").value.trim(),
+      published: $("newsPublished").checked,
+      createdAt: serverTimestamp(),
+      createdBy: currentUser.uid
+    });
+
+    e.target.reset();
+    $("newsPublished").checked = true;
+    await loadNews();
+    msg("status", "News saved successfully.");
+  } catch (err) {
+    msg("status", "Could not save news: " + err.message);
+  }
+});
+
+$("eventForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!authorized()) return;
+
+  try {
+    await addDoc(collection(db, "siteContent"), {
+      type: "event",
+      title: $("eventTitle").value.trim(),
+      eventDate: $("eventDate").value,
+      text: $("eventText").value.trim(),
+      published: $("eventPublished").checked,
+      createdAt: serverTimestamp(),
+      createdBy: currentUser.uid
+    });
+
+    e.target.reset();
+    $("eventPublished").checked = true;
+    await loadEvents();
+    msg("status", "Event saved successfully.");
+  } catch (err) {
+    msg("status", "Could not save event: " + err.message);
+  }
+});
+
+async function loadPopupSettings() {
+  const all = await records("siteContent");
+  const item = all.find(x => x.type === "admissionPopup");
+
+  if (!item) return;
+
+  $("popupAdminTitle").value = item.title || "";
+  $("popupAdminMessage").value = item.text || "";
+  $("popupAdminSession").value = item.session || "2026–27";
+  $("popupEnabled").checked = item.enabled === true;
+
+  $("popupForm").dataset.editId = item.id;
+}
+
+$("popupForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!authorized()) return;
+
+  const data = {
+    type: "admissionPopup",
+    title: $("popupAdminTitle").value.trim(),
+    text: $("popupAdminMessage").value.trim(),
+    session: $("popupAdminSession").value.trim(),
+    enabled: $("popupEnabled").checked,
+    published: $("popupEnabled").checked,
+    updatedAt: serverTimestamp(),
+    createdBy: currentUser.uid
+  };
+
+  try {
+    const editId = e.currentTarget.dataset.editId;
+
+    if (editId) {
+      await updateDoc(doc(db, "siteContent", editId), data);
+    } else {
+      const all = await records("siteContent");
+      const old = all.find(x => x.type === "admissionPopup");
+
+      if (old) {
+        await updateDoc(doc(db, "siteContent", old.id), data);
+        e.currentTarget.dataset.editId = old.id;
+      } else {
+        const saved = await addDoc(collection(db, "siteContent"), {
+          ...data,
+          createdAt: serverTimestamp()
+        });
+        e.currentTarget.dataset.editId = saved.id;
+      }
+    }
+
+    msg("status", "Admission popup settings saved.");
+  } catch (err) {
+    msg("status", "Could not save popup settings: " + err.message);
+  }
+});
+
+$("loadNewsBtn").onclick = () => guarded(loadNews);
+$("loadEventsBtn").onclick = () => guarded(loadEvents);
+
+document.querySelector('[data-tab="popupPanel"]').addEventListener("click", () => {
+  guarded(loadPopupSettings);
+});
+  async function refresh(){if(!authorized())return;msg("status","Refreshing dashboard…");try{await Promise.all([loadStudents(),loadSyllabus(),loadNotices(),loadAdmitCount()]);await loadResults();msg("status","Dashboard refreshed.")}catch(e){msg("status","Could not load data: "+(e.code?e.code+" — ":"")+e.message)}}
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginBtn").disabled=true;msg("loginStatus","Signing in…");try{const entered=$("email").value.trim().toLowerCase();if(entered!==ADMIN_EMAIL.toLowerCase())throw Error("This email is not the configured admin email.");await signInWithEmailAndPassword(auth,ADMIN_EMAIL,$("password").value);$("password").value="";msg("loginStatus","")}catch(e){msg("loginStatus",e.code==="auth/invalid-credential"||e.code==="auth/wrong-password"?"Email or password is incorrect.":"Login failed: "+e.message)}finally{$("loginBtn").disabled=false}});
 function resetStudentForm(){const f=$("studentForm");f.reset();delete f.dataset.editId;f.querySelector('[type=submit]').textContent="Add Student Record"}
 $("studentForm").addEventListener("submit",async e=>{e.preventDefault();if(!authorized())return;const f=e.currentTarget,editId=f.dataset.editId||"",admissionNumber=$("admissionNumber").value.trim(),studentUid=$("studentUid").value.trim();if(students.some(s=>s.admissionNumber===admissionNumber&&s.id!==editId)){msg("status","Admission number already exists.");return}if(students.some(s=>s.studentUid===studentUid&&s.id!==editId)){msg("status","This Firebase UID is already linked to another student.");return}const data={studentName:$("studentName").value.trim(),admissionNumber,studentClass:$("studentClass").value,rollNumber:$("rollNumber").value.trim(),parentName:$("parentName").value.trim(),studentUid,photoUrl:$("studentPhotoUrl").value.trim(),updatedAt:serverTimestamp()};const b=f.querySelector('[type=submit]');b.disabled=true;try{if(editId)await updateDoc(doc(db,"students",editId),data);else await addDoc(collection(db,"students"),{...data,createdAt:serverTimestamp()});resetStudentForm();await loadStudents();msg("status",editId?"Student updated.":"Student record saved.")}catch(err){msg("status","Could not save student: "+err.message)}finally{b.disabled=false}});
