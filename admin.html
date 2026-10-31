@@ -39,7 +39,92 @@ button{border:0;border-radius:10px;padding:11px 15px;background:var(--blue);colo
 <section class="card tabPanel hidden" id="syllabusPanel"><h2>Add Syllabus PDF Link</h2><p class="muted">Upload the PDF to your repository or another HTTPS host, then paste its public URL. This form saves a link; it does not upload a file.</p>
 <form id="syllabusForm"><div class="two-col"><div><label for="syllabusTitle">Title</label><input id="syllabusTitle" required maxlength="120"></div><div><label for="uploadClass">Class</label><select id="uploadClass" required><option value="">Select Class</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div><div><label for="uploadExam">Exam Type</label><select id="uploadExam"><option>Unit Test 1st</option><option>Unit Test 2nd</option><option>Half Yearly Examination</option><option>Annual Examination</option></select></div><div><label for="uploadSession">Session</label><input id="uploadSession" value="2026–27" required maxlength="20"></div></div><label for="syllabusUrl">Public PDF URL</label><input id="syllabusUrl" type="url" required placeholder="https://..."><label><input id="syllabusPublished" type="checkbox" checked style="width:auto;min-height:auto"> Publish immediately</label><button id="uploadSyllabusBtn" type="submit">Save Syllabus Link</button></form><h3>Saved Syllabus</h3><button id="loadSyllabusBtn" class="secondary">Load Syllabus</button><div class="table-wrap" id="syllabusTable"></div></section>
 <section class="card tabPanel hidden" id="noticePanel"><h2>Notice Board Management</h2><form id="noticeForm"><label for="noticeTitle">Notice Title</label><input id="noticeTitle" required maxlength="120"><label for="noticeText">Notice Details</label><textarea id="noticeText" required maxlength="2000"></textarea><div class="two-col"><div><label for="noticeClass">Audience</label><select id="noticeClass"><option>All Classes</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div><div><label><input id="noticePublished" type="checkbox" checked style="width:auto;min-height:auto"> Publish on public website</label></div></div><button type="submit">Save Notice</button></form><h3>Saved Notices</h3><button id="loadNoticesBtn" class="secondary">Load Notices</button><div class="table-wrap" id="noticeTable"></div></section>
-<section class="card tabPanel hidden" id="resultPanel"><h2>Marks & Result Management</h2><form id="resultForm"><div class="two-col"><div><label for="resultExam">Exam Type</label><select id="resultExam" required><option>Unit Test 1st</option><option>Unit Test 2nd</option><option>Half-Yearly Examination</option><option>Annual Examination</option><option>Practical</option></select></div><div><label for="resultClass">Class</label><select id="resultClass" required><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div></div><label for="resultStudent">Student</label><select id="resultStudent" required><option value="">Select Student</option></select><h3>Subject-wise Marks</h3><div id="subjectRows"></div><button type="button" id="addSubjectBtn" class="secondary">+ Add Subject</button><div class="two-col"><div><label for="totalObtained">Total Obtained Marks</label><input id="totalObtained" readonly value="0"></div><div><label for="totalMaximum">Total Maximum Marks</label><input id="totalMaximum" readonly value="0"></div></div><label for="overallPercentage">Overall Percentage</label><input id="overallPercentage" readonly value="0%"><label><input id="resultPublished" type="checkbox" checked style="width:auto;min-height:auto"> Publish result for student</label><button type="submit">Save Result</button><button type="button" id="cancelResultEdit" class="secondary hidden">Cancel Edit</button></form><h3>Saved Results</h3><button type="button" id="loadResultsBtn" class="secondary">Load Results</button><div class="table-wrap" id="resultsTable"></div></section>
+<section class="card tabPanel hidden" id="resultPanel"><h2>Marks & Result Management</h2><form id="resultForm"><div class="two-col"><div><label for="resultExam">Exam Type</label><select id="resultExam" required><option>Unit Test 1st</option><option>Unit Test 2nd</option><option>Half-Yearly Examination</option><option>Annual Examination</option><option>Practical</option></select></div><div><label for="resultClass">Class</label><select id="resultClass" required><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div></div><label for="resultStudent">Student</label><select id="resultStudent" required><option value="">Select Student</option></select><h3>Subject-wise Marks</h3><div id="subjectRows"></div><button type="button" id="addSubjectBtn" class="secondary">+ Add Subject</button><div class="two-col"><div><label for="totalObtained">Total Obtained Marks</label><input id="totalObtained" readonly value="0"></div><div><label for="totalMaximum">Total Maximum Marks</label><input id="totalMaximum" readonly value="0"></div></div><label for="overallPercentage">Overall Percentage</label><input id="overallPercentage" readonly value="0%"><label><input id="resultPublished" type="checkbox" checked style="width:auto;min-height:auto"> Publish result for student</label><button type="submit">Save Result</button><button type="button" id="cancelResultEdit" class="secondary hidden">Cancel Edit</button></form><h3>Saved Results</h3><button type="button" id="loadResultsBtn" class="secondary">Load Results</button><div class="table-wrap" id="resultsTable"></div></section> <!-- LATEST NEWS MANAGEMENT -->
+<section class="card tabPanel hidden" id="newsPanel">
+  <h2>Latest News Management</h2>
+
+  <form id="newsForm">
+    <label for="newsTitle">News Title</label>
+    <input id="newsTitle" required maxlength="120">
+
+    <label for="newsText">News Details</label>
+    <textarea id="newsText" required maxlength="2000"></textarea>
+
+    <label>
+      <input id="newsPublished" type="checkbox" checked
+        style="width:auto;min-height:auto">
+      Publish on website
+    </label>
+
+    <button type="submit">Save News</button>
+  </form>
+
+  <h3>Saved News</h3>
+  <button type="button" id="loadNewsBtn" class="secondary">
+    Load News
+  </button>
+  <div class="table-wrap" id="newsTable"></div>
+</section>
+
+<!-- UPCOMING EVENTS MANAGEMENT -->
+<section class="card tabPanel hidden" id="eventPanel">
+  <h2>Upcoming Events Management</h2>
+
+  <form id="eventForm">
+    <label for="eventTitle">Event Name</label>
+    <input id="eventTitle" required maxlength="120">
+
+    <label for="eventDate">Event Date</label>
+    <input id="eventDate" type="date" required>
+
+    <label for="eventText">Event Details</label>
+    <textarea id="eventText" required maxlength="2000"></textarea>
+
+    <label>
+      <input id="eventPublished" type="checkbox" checked
+        style="width:auto;min-height:auto">
+      Publish on website
+    </label>
+
+    <button type="submit">Save Event</button>
+  </form>
+
+  <h3>Saved Events</h3>
+  <button type="button" id="loadEventsBtn" class="secondary">
+    Load Events
+  </button>
+  <div class="table-wrap" id="eventTable"></div>
+</section>
+
+<!-- ADMISSION POPUP MANAGEMENT -->
+<section class="card tabPanel hidden" id="popupPanel">
+  <h2>Admission Popup Management</h2>
+
+  <form id="popupForm">
+    <label for="popupAdminTitle">Popup Title</label>
+    <input id="popupAdminTitle" required maxlength="120"
+      value="Give Your Child a Bright Future">
+
+    <label for="popupAdminMessage">Popup Message</label>
+    <textarea id="popupAdminMessage" required maxlength="500">Admissions are open for Nursery to Class 5.</textarea>
+
+    <label for="popupAdminSession">Session</label>
+    <input id="popupAdminSession" required maxlength="30"
+      value="2026–27">
+
+    <label>
+      <input id="popupEnabled" type="checkbox"
+        style="width:auto;min-height:auto">
+      Enable admission popup on website
+    </label>
+
+    <button type="submit">Save Popup Settings</button>
+  </form>
+
+  <p class="muted">
+    Popup tabhi public website par dikhega jab Enable checkbox selected hoga.
+  </p>
+</section>
 </section></main><footer>ANVPS Admin</footer>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
