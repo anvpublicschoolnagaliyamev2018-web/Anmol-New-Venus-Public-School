@@ -158,12 +158,21 @@ select {
   pointer-events: none;
 }
 
+
 .intro-logo {
-  width: 105px;
-  height: 105px;
+  display: block;
+  width: min(220px, 65vw);
+  height: auto;
+  max-height: 220px;
   object-fit: contain;
+  margin: 0 auto 10px;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
   animation: float 2s ease-in-out infinite;
 }
+
 
 .intro-screen h1 {
   font-size: clamp(1.5rem, 5vw, 2.2rem);
