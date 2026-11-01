@@ -1,1 +1,25 @@
 
+{
+  "id": "/Anmol-New-Venus-Public-School/",
+  "name": "ANMOL NEW VENUS PUBLIC SCHOOL",
+  "short_name": "ANV SCHOOL",
+  "description": "Official School Application",
+  "start_url": "/Anmol-New-Venus-Public-School/",
+  "scope": "/Anmol-New-Venus-Public-School/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07152f",
+  "theme_color": "#102b63",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
