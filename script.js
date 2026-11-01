@@ -13,16 +13,18 @@ const CASHFREE_PAYMENT_LINK = "https://payments.cashfree.com/forms?code=anv-regi
 
 
 
-/* ANVPS Video Intro */
+
+/* ANVPS GIF Intro */
 window.addEventListener("load", function () {
   const intro = document.getElementById("introScreen");
 
   if (intro) {
     setTimeout(function () {
       intro.classList.add("hide");
-    }, 12000);
+    }, 7000);
   }
 });
+
 
 
 
