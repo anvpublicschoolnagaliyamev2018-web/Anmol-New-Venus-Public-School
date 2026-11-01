@@ -323,13 +323,10 @@ function loadAdmissionPopup(items) {
   }
 
   closeButton.onclick = () => {
-    popup.classList.add("hidden");
-    try {
-      sessionStorage.setItem("anvPopupClosed", "yes");
-    } catch (error) {}
-  };
+  popup.classList.add("hidden");
+};
 
-  popup.classList.remove("hidden");
+popup.classList.remove("hidden");
 }
 
 // SYLLABUS
