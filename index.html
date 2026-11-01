@@ -21,21 +21,121 @@
 
 
 
+
 <div id="introScreen" class="intro-screen">
-  <video
-    class="intro-logo"
-    autoplay
-    muted
-    playsinline
-    loop
-  >
-    <source src="school-logo.webm" type="video/webm">
-  </video>
+
+  <svg class="intro-logo" viewBox="0 0 400 400"
+       xmlns="http://www.w3.org/2000/svg">
+
+    <defs>
+      <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#fff0a6"/>
+        <stop offset="50%" stop-color="#f5bd35"/>
+        <stop offset="100%" stop-color="#a66b12"/>
+      </linearGradient>
+
+      <linearGradient id="blue" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2866bb"/>
+        <stop offset="100%" stop-color="#071b42"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Laurel wreath -->
+    <g class="logo-laurel" fill="none"
+       stroke="url(#gold)" stroke-width="5"
+       stroke-linecap="round">
+      <path d="M112 310 C45 250 55 145 135 82"/>
+      <path d="M288 310 C355 250 345 145 265 82"/>
+
+      <g fill="url(#gold)" stroke="none">
+        <ellipse cx="77" cy="260" rx="9" ry="21" transform="rotate(-45 77 260)"/>
+        <ellipse cx="65" cy="218" rx="9" ry="21" transform="rotate(-25 65 218)"/>
+        <ellipse cx="67" cy="175" rx="9" ry="21" transform="rotate(5 67 175)"/>
+        <ellipse cx="83" cy="135" rx="9" ry="21" transform="rotate(30 83 135)"/>
+        <ellipse cx="108" cy="103" rx="9" ry="21" transform="rotate(45 108 103)"/>
+
+        <ellipse cx="323" cy="260" rx="9" ry="21" transform="rotate(45 323 260)"/>
+        <ellipse cx="335" cy="218" rx="9" ry="21" transform="rotate(25 335 218)"/>
+        <ellipse cx="333" cy="175" rx="9" ry="21" transform="rotate(-5 333 175)"/>
+        <ellipse cx="317" cy="135" rx="9" ry="21" transform="rotate(-30 317 135)"/>
+        <ellipse cx="292" cy="103" rx="9" ry="21" transform="rotate(-45 292 103)"/>
+      </g>
+    </g>
+
+    <!-- Shield -->
+    <g class="logo-shield">
+      <path d="M200 65 L290 105 L278 235
+               Q260 290 200 320
+               Q140 290 122 235 L110 105 Z"
+            fill="url(#blue)" stroke="url(#gold)"
+            stroke-width="8" stroke-linejoin="round"/>
+
+      <path d="M200 80 L275 113 L265 229
+               Q250 275 200 300
+               Q150 275 135 229 L125 113 Z"
+            fill="none" stroke="#f5bd35"
+            stroke-width="2"/>
+    </g>
+
+    <!-- Sun -->
+    <g class="logo-sun" fill="url(#gold)">
+      <circle cx="200" cy="137" r="23"/>
+      <path d="M200 99 V91 M200 183 V175
+               M162 137 H154 M246 137 H238
+               M173 110 L167 104 M233 170 L227 164
+               M227 110 L233 104 M167 170 L173 164"
+            stroke="#f5bd35" stroke-width="5"
+            stroke-linecap="round" fill="none"/>
+    </g>
+
+    <!-- Open book -->
+    <g class="logo-book" fill="none"
+       stroke="url(#gold)" stroke-width="5"
+       stroke-linejoin="round">
+      <path d="M151 174 Q177 162 200 180
+               Q223 162 249 174
+               L249 222 Q222 211 200 229
+               Q178 211 151 222 Z"/>
+      <path d="M200 180 V229"/>
+      <path d="M161 187 Q179 181 190 191
+               M210 191 Q225 181 239 187"/>
+    </g>
+
+    <!-- ANV lettering -->
+    <g class="logo-letters" fill="#fff0a6"
+       text-anchor="middle"
+       font-family="Georgia,serif"
+       font-weight="bold">
+      <text x="200" y="265" font-size="37"
+            letter-spacing="4">ANV</text>
+    </g>
+
+    <!-- Ribbon -->
+    <g class="logo-ribbon">
+      <path d="M105 300 L295 300 L278 338
+               L200 354 L122 338 Z"
+            fill="url(#gold)" stroke="#fff0a6"
+            stroke-width="3"/>
+      <text x="200" y="329" text-anchor="middle"
+            font-size="15" font-weight="bold"
+            fill="#102b63" letter-spacing="2">
+        EST. 2018
+      </text>
+    </g>
+
+    <!-- Final glow -->
+    <circle class="logo-glow" cx="200" cy="200"
+            r="165" fill="none"
+            stroke="#f5bd35" stroke-width="2"/>
+
+  </svg>
 
   <h1>ANV PUBLIC SCHOOL</h1>
   <p>Learning Today, Leading Tomorrow</p>
   <div class="loader"></div>
+
 </div>
+
 
 
 
