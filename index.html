@@ -113,30 +113,328 @@
 <footer class="footer"><div class="container footer-inner"><div><h3>ANV PUBLIC SCHOOL</h3><p>Learning Today, Leading Tomorrow</p></div><p>© <span id="currentYear">2026</span> ANV Public School. All rights reserved.</p></div></footer>
 <div class="floating-actions"><a href="tel:+919756201099" class="floating-btn call-btn" aria-label="Call school">☎</a><a href="https://wa.me/919756201099" target="_blank" rel="noopener" class="floating-btn whatsapp-btn" aria-label="WhatsApp school">✆</a></div>
 <script src="script.js"></script>
+
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import {getFirestore,collection,getDocs,query,where,orderBy} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-const cfg={apiKey:"AIzaSyDPQNf38Abzi01ysHey5GDPa77NIALHnw0",authDomain:"anv-public-school.firebaseapp.com",projectId:"anv-public-school",appId:"1:549207509375:web:efe695091a65f84992b24a"};
-const db=getFirestore(initializeApp(cfg));
-const $=id=>document.getElementById(id);
-function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function showError(id,msg){$(id).textContent=msg;}
-async function loadPublic(){
- try{
-  const snap=await getDocs(query(collection(db,"siteContent"),where("published","==",true)));
-  const items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.type==="announcement").sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  const box=$("publicNotices");box.replaceChildren();
-  if(!items.length){box.textContent="No notices have been published yet.";return;}
-  items.forEach(n=>{const a=document.createElement("article");a.className="portal-item";const h=document.createElement("h3");h.textContent=n.title||"School Notice";const p=document.createElement("p");p.textContent=n.text||"";const m=document.createElement("p");m.className="portal-muted";m.textContent=n.createdAt?.seconds?new Date(n.createdAt.seconds*1000).toLocaleDateString():"";a.append(h,p,m);box.append(a);});
- }catch(e){showError("publicNotices","Notices could not load. Please check Firestore setup and rules.");}
- try{
-  const snap=await getDocs(query(collection(db,"syllabus"),where("published","==",true)));
-  const items=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  const box=$("publicSyllabus");
-  function render(){box.replaceChildren();const cls=$("syllabusClass").value,exam=$("syllabusExam").value;const filtered=items.filter(x=>(!cls||x.studentClass===cls)&&(!exam||x.examType===exam));if(!filtered.length){box.textContent="No syllabus is published for this selection yet.";return;}filtered.forEach(x=>{const a=document.createElement("article");a.className="portal-item";const h=document.createElement("h3");h.textContent=x.title||"Syllabus";const p=document.createElement("p");p.textContent=`${x.studentClass||"Class not specified"} · ${x.examType||"Exam not specified"} · Session ${x.session||"—"}`;const link=document.createElement("a");link.href=x.downloadURL||"#";link.target="_blank";link.rel="noopener";link.textContent="Download PDF";if(/^https:\/\//i.test(x.downloadURL||"")){a.append(h,p,link)}else{const warn=document.createElement("p");warn.textContent="PDF link not configured yet.";a.append(h,p,warn)}box.append(a);});}
-  $("syllabusClass").addEventListener("change",render);$("syllabusExam").addEventListener("change",render);render();
- }catch(e){showError("publicSyllabus","Syllabus could not load. Check Firestore rules and the public PDF links.");}
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const cfg = {
+  apiKey: "AIzaSyDPQNf38Abzi01ysHey5GDPa77NIALHnw0",
+  authDomain: "anv-public-school.firebaseapp.com",
+  projectId: "anv-public-school",
+  appId: "1:549207509375:web:efe695091a65f84992b24a"
+};
+
+const app = initializeApp(cfg);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+
+function showError(id, message) {
+  const box = $(id);
+  if (box) box.textContent = message;
 }
+
+function formatDate(value) {
+  if (!value) return "";
+  const date = value.toDate ? value.toDate() : new Date(value);
+  return isNaN(date.getTime()) ? "" : date.toLocaleDateString("en-IN");
+}
+
+function createCard(title, description, dateText = "") {
+  const article = document.createElement("article");
+  article.className = "portal-item";
+
+  const heading = document.createElement("h3");
+  heading.textContent = title || "School Update";
+
+  const paragraph = document.createElement("p");
+  paragraph.textContent = description || "";
+
+  article.append(heading, paragraph);
+
+  if (dateText) {
+    const meta = document.createElement("p");
+    meta.className = "portal-muted";
+    meta.textContent = dateText;
+    article.append(meta);
+  }
+
+  return article;
+}
+
+async function getPublishedContent() {
+  const snap = await getDocs(
+    query(
+      collection(db, "siteContent"),
+      where("published", "==", true)
+    )
+  );
+
+  return snap.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+}
+
+// NOTICE BOARD AND TICKER
+function loadNotices(items) {
+  const box = $("publicNotices");
+  const ticker = $("noticeTickerTrack");
+
+  const notices = items
+    .filter(item => item.type === "announcement")
+    .sort((a, b) =>
+      (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)
+    );
+
+  if (box) {
+    box.replaceChildren();
+
+    if (!notices.length) {
+      box.textContent = "No notices have been published yet.";
+    } else {
+      notices.forEach(item => {
+        box.append(
+          createCard(
+            item.title || "School Notice",
+            item.text || "",
+            formatDate(item.createdAt)
+          )
+        );
+      });
+    }
+  }
+
+  if (ticker) {
+    ticker.replaceChildren();
+
+    const updates = notices.map(
+      item => item.title || item.text || "School Notice"
+    );
+
+    if (!updates.length) {
+      updates.push("Welcome to ANV Public School");
+    }
+
+    updates.forEach(message => {
+      const span = document.createElement("span");
+      span.textContent = " • " + message + " • ";
+      ticker.append(span);
+    });
+  }
+}
+
+// LATEST NEWS
+function loadNews(items) {
+  const box = $("publicNews");
+  if (!box) return;
+
+  const news = items
+    .filter(item => item.type === "news")
+    .sort((a, b) =>
+      (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)
+    );
+
+  box.replaceChildren();
+
+  if (!news.length) {
+    box.textContent = "No news has been published yet.";
+    return;
+  }
+
+  news.forEach(item => {
+    box.append(
+      createCard(
+        item.title || "School News",
+        item.text || "",
+        formatDate(item.createdAt)
+      )
+    );
+  });
+}
+
+// UPCOMING EVENTS
+function loadEvents(items) {
+  const box = $("publicEvents");
+  if (!box) return;
+
+  const events = items
+    .filter(item => item.type === "event")
+    .sort((a, b) =>
+      (a.eventDate?.seconds || 0) - (b.eventDate?.seconds || 0)
+    );
+
+  box.replaceChildren();
+
+  if (!events.length) {
+    box.textContent = "No upcoming events have been published yet.";
+    return;
+  }
+
+  events.forEach(item => {
+    const date = formatDate(item.eventDate);
+
+    box.append(
+      createCard(
+        item.title || "School Event",
+        item.text || "",
+        date ? "Event Date: " + date : ""
+      )
+    );
+  });
+}
+
+// ADMISSION POPUP
+function loadAdmissionPopup(items) {
+  const popup = $("admissionPopup");
+  if (!popup) return;
+
+  const settings = items.find(
+    item => item.type === "admissionPopup"
+  );
+
+  if (!settings || settings.enabled !== true) return;
+
+  $("popupTitle").textContent =
+    settings.title || "Admissions Open";
+
+  $("popupMessage").textContent =
+    settings.text || "Admissions are open. Contact the school for details.";
+
+  $("popupSession").textContent =
+    settings.session || "Session 2026–27";
+
+  const closeButton = $("closeAdmissionPopup");
+
+  if (!closeButton) return;
+
+  try {
+    if (sessionStorage.getItem("anvPopupClosed") === "yes") return;
+  } catch (error) {
+    // Storage unavailable; popup can still open.
+  }
+
+  closeButton.onclick = () => {
+    popup.classList.add("hidden");
+    try {
+      sessionStorage.setItem("anvPopupClosed", "yes");
+    } catch (error) {}
+  };
+
+  popup.classList.remove("hidden");
+}
+
+// SYLLABUS
+async function loadSyllabus() {
+  const box = $("publicSyllabus");
+  if (!box) return;
+
+  const snap = await getDocs(
+    query(
+      collection(db, "syllabus"),
+      where("published", "==", true)
+    )
+  );
+
+  const syllabus = snap.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+
+  function render() {
+    box.replaceChildren();
+
+    const selectedClass = $("syllabusClass")?.value || "";
+    const selectedExam = $("syllabusExam")?.value || "";
+
+    const filtered = syllabus.filter(item =>
+      (!selectedClass || item.studentClass === selectedClass) &&
+      (!selectedExam || item.examType === selectedExam)
+    );
+
+    if (!filtered.length) {
+      box.textContent = "No syllabus is published for this selection yet.";
+      return;
+    }
+
+    filtered.forEach(item => {
+      const article = document.createElement("article");
+      article.className = "portal-item";
+
+      const heading = document.createElement("h3");
+      heading.textContent = item.title || "Syllabus";
+
+      const details = document.createElement("p");
+      details.textContent =
+        (item.studentClass || "Class not specified") +
+        " · " +
+        (item.examType || "Exam not specified") +
+        " · Session " +
+        (item.session || "—");
+
+      article.append(heading, details);
+
+      if (/^https:\/\//i.test(item.downloadURL || "")) {
+        const link = document.createElement("a");
+        link.href = item.downloadURL;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "Download PDF";
+        article.append(link);
+      } else {
+        const warning = document.createElement("p");
+        warning.textContent = "PDF link not configured yet.";
+        article.append(warning);
+      }
+
+      box.append(article);
+    });
+  }
+
+  $("syllabusClass")?.addEventListener("change", render);
+  $("syllabusExam")?.addEventListener("change", render);
+
+  render();
+}
+
+// LOAD ALL PUBLIC CONTENT
+async function loadPublic() {
+  try {
+    const items = await getPublishedContent();
+
+    loadNotices(items);
+    loadNews(items);
+    loadEvents(items);
+    loadAdmissionPopup(items);
+
+  } catch (error) {
+    console.error("Public content loading error:", error);
+
+    showError("publicNotices", "Notices could not load.");
+    showError("publicNews", "News could not load.");
+    showError("publicEvents", "Events could not load.");
+  }
+
+  try {
+    await loadSyllabus();
+  } catch (error) {
+    console.error("Syllabus loading error:", error);
+    showError(
+      "publicSyllabus",
+      "Syllabus could not load. Please check Firestore setup and rules."
+    );
+  }
+}
+
 loadPublic();
 </script>
+
 </body></html>
