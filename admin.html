@@ -307,7 +307,28 @@ $("loadEventsBtn").onclick = () => guarded(loadEvents);
 document.querySelector('[data-tab="popupPanel"]').addEventListener("click", () => {
   guarded(loadPopupSettings);
 });
-  async function refresh(){if(!authorized())return;msg("status","Refreshing dashboard…");try{await Promise.all([loadStudents(),loadSyllabus(),loadNotices(),loadAdmitCount()]);await loadResults();msg("status","Dashboard refreshed.")}catch(e){msg("status","Could not load data: "+(e.code?e.code+" — ":"")+e.message)}}
+  async function refresh(){
+  if(!authorized()) return;
+
+  msg("status","Refreshing dashboard…");
+
+  try {
+    await Promise.all([
+      loadStudents(),
+      loadSyllabus(),
+      loadNotices(),
+      loadAdmitCount(),
+      loadNews(),
+      loadEvents(),
+      loadResults()
+    ]);
+
+    msg("status","Dashboard refreshed successfully.");
+  } catch(e) {
+    msg("status","Could not load data: "+
+      (e.code ? e.code+" — " : "")+e.message);
+  }
+}
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginBtn").disabled=true;msg("loginStatus","Signing in…");try{const entered=$("email").value.trim().toLowerCase();if(entered!==ADMIN_EMAIL.toLowerCase())throw Error("This email is not the configured admin email.");await signInWithEmailAndPassword(auth,ADMIN_EMAIL,$("password").value);$("password").value="";msg("loginStatus","")}catch(e){msg("loginStatus",e.code==="auth/invalid-credential"||e.code==="auth/wrong-password"?"Email or password is incorrect.":"Login failed: "+e.message)}finally{$("loginBtn").disabled=false}});
 function resetStudentForm(){const f=$("studentForm");f.reset();delete f.dataset.editId;f.querySelector('[type=submit]').textContent="Add Student Record"}
 $("studentForm").addEventListener("submit",async e=>{e.preventDefault();if(!authorized())return;const f=e.currentTarget,editId=f.dataset.editId||"",admissionNumber=$("admissionNumber").value.trim(),studentUid=$("studentUid").value.trim();if(students.some(s=>s.admissionNumber===admissionNumber&&s.id!==editId)){msg("status","Admission number already exists.");return}if(students.some(s=>s.studentUid===studentUid&&s.id!==editId)){msg("status","This Firebase UID is already linked to another student.");return}const data={studentName:$("studentName").value.trim(),admissionNumber,studentClass:$("studentClass").value,rollNumber:$("rollNumber").value.trim(),parentName:$("parentName").value.trim(),studentUid,photoUrl:$("studentPhotoUrl").value.trim(),updatedAt:serverTimestamp()};const b=f.querySelector('[type=submit]');b.disabled=true;try{if(editId)await updateDoc(doc(db,"students",editId),data);else await addDoc(collection(db,"students"),{...data,createdAt:serverTimestamp()});resetStudentForm();await loadStudents();msg("status",editId?"Student updated.":"Student record saved.")}catch(err){msg("status","Could not save student: "+err.message)}finally{b.disabled=false}});
