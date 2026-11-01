@@ -20,7 +20,7 @@ window.addEventListener("load", function () {
   if (intro) {
     setTimeout(function () {
       intro.classList.add("hide");
-    }, 7000);
+    }, 12000);
   }
 });
 
