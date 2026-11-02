@@ -1,1 +1,14 @@
-
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.anvpublicschoolnagaliyamev2018_web.twa",
+      "sha256_cert_fingerprints": [
+        "42:E0:69:9B:49:5D:93:E1:5E:B4:BE:38:2C:27:6D:79:75:FF:A2:79:A8:55:C6:F3:60:2C:5E:FE:C2:63:A8:4A"
+      ]
+    }
+  }
+]
