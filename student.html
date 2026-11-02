@@ -215,11 +215,41 @@ onAuthStateChanged(auth, async user => {
   }
 
   $("loginCard").classList.add("hidden");
-  $("portal").classList.remove("hidden");
-  $("studentWelcome").textContent =
-    "Signed in as " + (user.email || "student");
+  $("portal").classList.add("hidden");
+  msg("loginStatus", "Verifying student account…");
 
-  await loadPortal(user);
+  try {
+    const studentRef = doc(db, "students", user.uid);
+    const studentSnap = await getDoc(studentRef);
+
+    if (!studentSnap.exists()) {
+      msg("loginStatus", "Student record not found. Contact school office.");
+      await signOut(auth);
+      return;
+    }
+
+    const studentData = studentSnap.data();
+
+    if (studentData.studentUid !== user.uid) {
+      msg("loginStatus", "Student verification failed.");
+      await signOut(auth);
+      return;
+    }
+
+    $("studentWelcome").textContent =
+      "Welcome, " + (studentData.studentName || user.email || "Student");
+
+    msg("loginStatus", "");
+    $("portal").classList.remove("hidden");
+
+    await loadPortal(user);
+
+  } catch (err) {
+    console.error("Student verification error:", err);
+    msg("loginStatus", "Verification failed. Contact school office.");
+
+    await signOut(auth);
+  }
 });
 
 async function loadPortal(user) {
